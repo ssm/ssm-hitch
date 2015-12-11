@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "ssm",
   "summary": "Install and configure Hitch TLS proxy",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "source": "https://github.com/ssm/ssm-hitch.git",
   "project_page": "https://github.com/ssm/ssm-hitch",
   "issues_url": "https://github.com/ssm/ssm-hitch/issues",
