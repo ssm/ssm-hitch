@@ -162,9 +162,9 @@ specified.
 * **cacert_source**: source to the ca certificate chain, either a
   file, or a puppet uri (optional, no default)
 
-No more than one of **cacert_content** and **cacert_source** must be
-specified.  If not specified, the dhparams of the **hitch** class is
-used instead.
+No more than one of **dhparams_content** and **dhparams_source** must
+be specified.  If not specified, the dhparams of the **hitch** class
+is used instead.
 
 * **dhparams_content**: a string containing the ca certificate chain
   (optional, default is the dhparams of the hitch class)
