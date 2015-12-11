@@ -8,6 +8,10 @@ class hitch::config {
   validate_absolute_path($::hitch::config_file)
   validate_absolute_path($::hitch::dhparams_file)
 
+  if $::hitch::dhparams {
+    validate_re($::hitch::dhparams, 'BEGIN DH PARAMETERS')
+  }
+
   file { $::hitch::config_root:
     ensure  => directory,
     recurse => true,
@@ -21,14 +25,25 @@ class hitch::config {
     ensure => present,
   }
 
-  exec { "${title} generate dhparams":
-    path    => '/usr/local/bin:/usr/bin:/bin',
-    command => "openssl dhparam 2048 -out ${::hitch::dhparams_file}",
+  if $::hitch::dhparams {
+    file { $::hitch::dhparams_file:
+      owner   => $::hitch::file_owner,
+      group   => $::hitch::group,
+      mode    => '0640',
+      content => $::hitch::dhparams,
+    }
   }
-  file { $::hitch::dhparams_file:
-    owner => $::hitch::file_owner,
-    group => $::hitch::group,
-    mode  => '0640',
+  else {
+    file { $::hitch::dhparams_file:
+      owner => $::hitch::file_owner,
+      group => $::hitch::group,
+      mode  => '0640',
+    }
+    ->
+    exec { "${title} generate dhparams":
+      path    => '/usr/local/bin:/usr/bin:/bin',
+      command => "openssl dhparam 2048 -out ${::hitch::dhparams_file}",
+    }
   }
 
   concat::fragment { "${title} config":

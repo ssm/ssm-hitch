@@ -8,6 +8,7 @@ class hitch::params {
   $config_root           = '/etc/hitch'
   $config_file           = '/etc/hitch/hitch.conf'
   $dhparams_file         = '/etc/hitch/dhparams.pem'
+  $dhparams              = undef
   $purge_config_root     = false
   $file_owner            = 'root'
 
