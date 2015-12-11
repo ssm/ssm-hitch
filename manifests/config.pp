@@ -27,6 +27,7 @@ class hitch::config {
 
   if $::hitch::dhparams {
     file { $::hitch::dhparams_file:
+      ensure  => present,
       owner   => $::hitch::file_owner,
       group   => $::hitch::group,
       mode    => '0640',
@@ -35,9 +36,10 @@ class hitch::config {
   }
   else {
     file { $::hitch::dhparams_file:
-      owner => $::hitch::file_owner,
-      group => $::hitch::group,
-      mode  => '0640',
+      ensure => present,
+      owner  => $::hitch::file_owner,
+      group  => $::hitch::group,
+      mode   => '0640',
     }
     ->
     exec { "${title} generate dhparams":
