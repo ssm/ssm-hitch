@@ -4,6 +4,10 @@
 #
 class hitch::config {
 
+  validate_absolute_path($::hitch::config_root)
+  validate_absolute_path($::hitch::config_file)
+  validate_absolute_path($::hitch::dhparams_file)
+
   file { $::hitch::config_root:
     ensure  => directory,
     recurse => true,
