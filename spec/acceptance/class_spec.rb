@@ -6,6 +6,10 @@ describe 'hitch class' do
     it 'should work idempotently with no errors' do
       pp = <<-EOS
       class { 'hitch': }
+      hitch::domain { 'example.org':
+        key_source  => '/tmp/example.org_key.pem',
+        cert_source => '/tmp/example.org_cert.pem',
+      }
       EOS
 
       # Run it twice and test for idempotency
