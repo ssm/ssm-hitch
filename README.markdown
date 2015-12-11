@@ -13,48 +13,171 @@
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves. This is your 30 second elevator pitch for your module. Consider including OS/Puppet version it works with.       
+This module installs and configures the Hitch TLS proxy, and adds a
+define to add domains.
 
 ## Module Description
 
-If applicable, this section should have a brief description of the technology the module integrates with and what that integration enables. This section should answer the questions: "What does this module *do*?" and "Why would I use it?"
+This module installs the hitch package, and controls the hitch service
+and the configuration file.
 
-If your module has a range of functionality (installation, configuration, management, etc.) this is the time to mention it.
+There is a defined type to add domains with key, certificate, as well
+as an optional certificate chain and dh parameter.  The TLS files are
+concatenated into one PEM file, and added to the configuration file.
+
 
 ## Setup
 
 ### What hitch affects
 
-* A list of files, packages, services, or operations that the module will alter, impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form. 
+* Package "hitch"
+* Service "hitch"
+* Directory "/etc/hitch", where "hitch.conf" and a PEM file for each
+  domain, containing TLS key, certificate, ca certificate chain, and
+  dh parameters.
+
 
 ### Setup Requirements **OPTIONAL**
 
-If your module requires anything extra before setting up (pluginsync enabled, etc.), mention it here. 
+The module requires that the "hitch" package is available in a
+reachable package repository.
+
+* If osfamily is RedHat, the module adds the epel-release package with
+  ensure_packages
+
+* If osfamily is Debian, you are expected to provide a repository
+  containing the "hitch" package.
+
 
 ### Beginning with hitch
 
-The very basic steps needed for a user to get the module up and running. 
+To start using hitch, you need to include the hitch class, and add at
+least one hitch::domain.
 
-If your most recent release breaks compatibility or requires particular steps for upgrading, you may wish to include an additional section here: Upgrading (For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+    include ::hitch
+    hitch::domain { 'example.com':
+      key_source  => '/tmp/key',
+      cert_source => '/tmp/cert.pem',
+    }
+
+When configured with this module, hitch will listen by default on all
+interfaces, port 443/TCP for both IPv4 and IPv6, and forward TCP
+connections to localhost, port 80.
+
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing the fancy stuff with your module here. 
+When using hitch with varnish or nginx, one can provide information
+about the connecting client, like the connecting IP Address and port,
+to varnish by using the PROXY protocol.  The backend should be
+configured with an additional listening port for this protocol.
+
+    class { '::hitch':
+      write_proxy_v2 => 'on',
+      backend        => '[::1]:6086'
+    }
+
+In case of varnish, add an extra "-a" parameter for a separate
+listening port:
+
+    -a '[::1]:6086,PROXY'
+
+…to have it listen on port 6086, using the PROXY protocol instead of
+the HTTP protocol.
+
+For more information about the PROXY protocol, see
+http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt
+
 
 ## Reference
 
-Here, list the classes, types, providers, facts, etc contained in your module. This section should include all of the under-the-hood workings of your module so people know what the module is touching on their system but don't need to mess with things. (We are working on automating this section!)
+### class: hitch
+
+This class installs hitch, and manages the service and configuration
+file.  To start, hitch requires at least one hitch::domain.
+
+Parameters
+
+* **frontend**: The listening port for hitch.  (optional, default is
+  the https port)
+* **ciphers**: The cipher list used for the encryption. (optional,
+  default is strong ciphers with forward secrecy)
+
+* **backend**: The address and port for the backend. (optional,
+  default is the http port on the local host)
+* **write_proxy_v2**: If set to "on", use the PROXY protocol instead
+  of HTTP for the backend connection.  (optional, default "off")
+
+* **package_name**: The name of the package to be installed (optional,
+  default is osfamily specific)
+* **service_name**: The name of the service (optional, default is
+  osfamily specific)
+
+* **file_owner**: The owner of the files and directories used to
+  configure hitch. (optional, default "root")
+* **config_file**: Path to the hitch configuration file (optional,
+  default is "/etc/hitch/hitch.conf")
+* **config_root**: Path to the root directory of the hitch
+  configuration (optional, default is "/etc/hitch")
+* **purge_config_root**: If true, remove all unknown files in the
+  config_root (optional, default false)
+
+* **dhparams_file**: Path the the dhparams file (optional, default is
+  /etc/hitch/dhparams.pem)
+* **dhparams_content**: A string containing the default dhparams used
+  in all domain PEM files.  (optional. If not set, a dhparams file
+  will be generated on the host.)
+
+* **domains**: A hash used to create hitch::domain resources, for use
+  with hiera. (optional, default {})
+
+### define: hitch::domain
+
+Configure a domain in hitch.conf, and generate the PEM file used to
+hold all the TLS keys, certificates and parameters.
+
+Parameters
+
+One of **key_content** and **key_source** is required.
+
+* **key_content**: a string containing the TLS key (no default)
+* **key_source**: source to the TLS key, either a file, or a puppet
+  uri (no default)
+
+One of **cert_content** and **cert_source** is required.
+
+* **cert_content**: a string containing the TLS certificate (no
+  default)
+* **cert_source**: source to the TLS certificate, either a file, or a
+  puppet uri (no default)
+
+* **ensure**: set the desired state of the resource. (optional, valid
+  values are absent or present, default is present)
+
+No more than one of **cacert_content** and **cacert_source** must be
+specified.
+
+* **cacert_content**: a string containing the ca certificate chain
+  (optional, no default)
+* **cacert_source**: source to the ca certificate chain, either a
+  file, or a puppet uri (optional, no default)
+
+No more than one of **cacert_content** and **cacert_source** must be
+specified.  If not specified, the dhparams of the **hitch** class is
+used instead.
+
+* **dhparams_content**: a string containing the ca certificate chain
+  (optional, default is the dhparams of the hitch class)
+* **dhparams_source**: source to the ca certificate chain, either a
+  file, or a puppet uri (optional, default is the dhparams of the
+  hitch class)
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+Hitch is available in EPEL 7 for OS Family RedHat, and will be
+available in Debian 9.
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them know what the ground rules for contributing are.
-
-## Release Notes/Contributors/Etc **Optional**
-
-If you aren't using changelog, put your release notes here (though you should consider using changelog). You may also add any additional sections you feel are necessary or important to include here. Please use the `## ` header. 
+Please see CONTRIBUTING.md for contributing to the development of this
+module.
