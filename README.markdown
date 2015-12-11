@@ -32,9 +32,10 @@ concatenated into one PEM file, and added to the configuration file.
 
 * Package "hitch"
 * Service "hitch"
-* Directory "/etc/hitch", where "hitch.conf" and a PEM file for each
-  domain, containing TLS key, certificate, ca certificate chain, and
-  dh parameters.
+* Directory "/etc/hitch"
+* Configuration file "/etc/hitch/hitch.conf"
+* A PEM file inside /etc/hitch for each domain, with TLS key,
+  certificate, ca certificate chain, and dh parameters.
 
 
 ### Setup Requirements **OPTIONAL**
