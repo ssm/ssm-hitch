@@ -21,6 +21,7 @@ describe 'hitch' do
 
           it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
           it { is_expected.to contain_concat__fragment('hitch::config config') }
+          it { is_expected.to contain_exec('hitch::config generate dhparams') }
         end
 
         context "hitch class with domains" do
