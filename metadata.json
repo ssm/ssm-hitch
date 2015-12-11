@@ -1,0 +1,33 @@
+{
+  "name": "ssm-hitch",
+  "version": "0.1.0",
+  "author": "ssm",
+  "summary": "Install and configure Hitch TLS proxy",
+  "license": "Apache 2.0",
+  "source": "https://github.com/ssm/ssm-hitch.git",
+  "project_page": "https://github.com/ssm/ssm-hitch",
+  "issues_url": "https://github.com/ssm/ssm-hitch/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    }
+  ]
+}
