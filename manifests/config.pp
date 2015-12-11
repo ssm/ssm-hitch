@@ -45,6 +45,7 @@ class hitch::config {
     exec { "${title} generate dhparams":
       path    => '/usr/local/bin:/usr/bin:/bin',
       command => "openssl dhparam 2048 -out ${::hitch::dhparams_file}",
+      creates => $::hitch::dhparams_file,
     }
   }
 
