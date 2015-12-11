@@ -139,6 +139,9 @@ hold all the TLS keys, certificates and parameters.
 
 Parameters
 
+* **ensure**: set the desired state of the resource. (optional, valid
+  values are absent or present, default is present)
+
 One of **key_content** and **key_source** is required.
 
 * **key_content**: a string containing the TLS key (no default)
@@ -151,9 +154,6 @@ One of **cert_content** and **cert_source** is required.
   default)
 * **cert_source**: source to the TLS certificate, either a file, or a
   puppet uri (no default)
-
-* **ensure**: set the desired state of the resource. (optional, valid
-  values are absent or present, default is present)
 
 No more than one of **cacert_content** and **cacert_source** must be
 specified.
