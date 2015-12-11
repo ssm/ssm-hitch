@@ -1,6 +1,6 @@
 {
   "name": "ssm-hitch",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "ssm",
   "summary": "Install and configure Hitch TLS proxy",
   "license": "Apache-2.0",
