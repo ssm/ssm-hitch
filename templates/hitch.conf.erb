@@ -1,0 +1,15 @@
+# Configuration for hitch
+
+user     = "<%= @user %>"
+group    = "<%= @group %>"
+frontend = "<%= @frontend %>"
+backend  = "<%= @backend %>"
+
+<% if @write_proxy_v2 == "on" -%>
+# use the PROXY v2 protocol to communicate with backend
+write-proxy-v2 = "<%= @write_proxy_v2 %>"
+<% end -%>
+
+# Define a cipher list for communication
+ciphers               = "<%= @ciphers %>"
+prefer-server-ciphers = on
