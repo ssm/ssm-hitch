@@ -4,13 +4,55 @@
 # them in the hitch config file
 #
 define hitch::domain (
-  $key,
-  $cert,
-  $ensure      = present,
-  $cacert      = undef,
-  $dhparams    = undef,
+  $ensure           = present,
+  $cacert_content   = undef,
+  $cacert_source    = undef,
+  $cert_content     = undef,
+  $cert_source      = undef,
+  $dhparams_content = undef,
+  $dhparams_source  = undef,
+  $key_content      = undef,
+  $key_source       = undef,
 )
 {
+
+  # Parameter validation
+
+  validate_re($ensure, ['^present$', '^absent$'])
+
+  # Exactly one of $key_source and $key_content
+  if ($key_content and $key_source) or (! $key_content and ! $key_source) {
+    fail("Hitch::Domain[${title}]: Please provide key_source or key_domain")
+  }
+  if $key_content {
+    validate_re($key_content, 'BEGIN PRIVATE KEY')
+  }
+
+  # Exactly one of $cert_content and $cert_source
+  if ($cert_content and $cert_source) or (!$cert_content and !$cert_source) {
+    fail("Hitch::Domain[${title}]: Please provide cert_source or cert_domain")
+  }
+  if $cert_content {
+    validate_re($cert_content, 'BEGIN CERTIFICATE')
+  }
+
+  # One or zero of $cacert_content or $cacert_source
+  if ($cacert_content and $cacert_source) {
+    fail("Hitch::Domain[${title}]: Please do not specify both cacert_source and cacert_domain")
+  }
+  if $cacert_content {
+    validate_re($cacert_content, 'BEGIN CERTIFICATE')
+  }
+
+  # One of $dhparams_content or $dhparams_source, with fallback to
+  # $::hitch::dhparams_file
+  if ($dhparams_content and $dhparams_source) {
+    fail("Hitch::Domain[${title}]: Please do not specify both dhparams_source and dhparams_domain")
+  }
+  if $dhparams_content {
+    validate_re($dhparams_content, 'BEGIN DH PARAMETERS')
+  }
+
 
   include ::hitch
   include ::hitch::config
@@ -21,16 +63,6 @@ define hitch::domain (
   $pem_file="${::hitch::config_root}/${title}.pem"
   validate_absolute_path($pem_file)
 
-  validate_re($key, 'BEGIN PRIVATE KEY')
-  validate_re($cert, 'BEGIN CERTIFICATE')
-  if $cacert {
-    validate_re($cacert, 'BEGIN CERTIFICATE')
-  }
-  if $dhparams {
-    validate_re($dhparams, 'BEGIN DH PARAMETERS')
-  }
-
-  validate_re($ensure, ['^present$', '^absent$'])
 
   # Add a line to the hitch config file
   concat::fragment { "hitch::domain ${title}":
@@ -47,39 +79,45 @@ define hitch::domain (
     group  => $::hitch::group,
   }
 
-  if $cacert {
+  if ($cacert_content or $cacert_source) {
     concat::fragment {"${title} cacert":
-      content => $cacert,
+      content => $cacert_content,
+      source  => $cacert_source,
       target  => $pem_file,
       order   => '01',
     }
   }
 
   concat::fragment {"${title} cert":
-    content => $cert,
+    content => $cert_content,
+    source  => $cert_source,
     target  => $pem_file,
     order   => '02',
   }
 
   concat::fragment {"${title} key":
-    content => $key,
+    content => $key_content,
+    source  => $key_source,
     target  => $pem_file,
     order   => '03',
   }
 
-  if $dhparams {
+  if ! $dhparams_content {
+    if $dhparams_source {
+      $_dhparams_source = $dhparams_source
+    }
+    else {
+      $_dhparams_source = $::hitch::dhparams_file
+      File[$::hitch::dhparams_file] -> Concat::Fragment["${title} dhparams"]
+    }
+  }
+
+  if ($dhparams_content or $_dhparams_source) {
     concat::fragment {"${title} dhparams":
-      content => $dhparams,
+      content => $dhparams_content,
+      source  => $_dhparams_source,
       target  => $pem_file,
       order   => '04',
     }
   }
-  else {
-    concat::fragment {"${title} dhparams":
-      source => $::hitch::dhparams_file,
-      target => $pem_file,
-      order  => '04',
-    }
-  }
-  
 }
