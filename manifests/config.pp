@@ -8,8 +8,8 @@ class hitch::config {
   validate_absolute_path($::hitch::config_file)
   validate_absolute_path($::hitch::dhparams_file)
 
-  if $::hitch::dhparams {
-    validate_re($::hitch::dhparams, 'BEGIN DH PARAMETERS')
+  if $::hitch::dhparams_content {
+    validate_re($::hitch::dhparams_content, 'BEGIN DH PARAMETERS')
   }
 
   file { $::hitch::config_root:
@@ -25,13 +25,13 @@ class hitch::config {
     ensure => present,
   }
 
-  if $::hitch::dhparams {
+  if $::hitch::dhparams_content {
     file { $::hitch::dhparams_file:
       ensure  => present,
       owner   => $::hitch::file_owner,
       group   => $::hitch::group,
       mode    => '0640',
-      content => $::hitch::dhparams,
+      content => $::hitch::dhparams_content,
     }
   }
   else {

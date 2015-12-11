@@ -23,7 +23,7 @@ class hitch (
   $file_owner        = $::hitch::params::file_owner,
   $config_file       = $::hitch::params::config_file,
   $dhparams_file     = $::hitch::params::dhparams_file,
-  $dhparams          = $::hitch::params::dhparams,
+  $dhparams_content  = $::hitch::params::dhparams,
   $config_root       = $::hitch::params::config_root,
   $purge_config_root = $::hitch::params::purge_config_root,
   $frontend          = $::hitch::params::frontend,
