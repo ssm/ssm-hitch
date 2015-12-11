@@ -1,5 +1,6 @@
 fixtures:
-  repositories:
-    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+  forge_modules:
+    stdlib: "puppetlabs/stdlib"
+    concat: "puppetlabs/concat"
   symlinks:
     hitch: "#{source_dir}"
