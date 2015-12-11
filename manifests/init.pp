@@ -6,13 +6,28 @@
 # Parameters
 # ----------
 #
-# * `sample parameter`
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# * `package_name`
+#   Package name for installing hitch
 #
+# * `service_name`
+#   Service name for the hitch service
+#
+# * `config_file`
+#   Configuration file. Default: /etc/hitch/hitch.conf
+#
+# * `config_root`
+#   Configuration root directory. Default: /etc/hitch/
 class hitch (
-  $package_name = $::hitch::params::package_name,
-  $service_name = $::hitch::params::service_name,
+  $package_name      = $::hitch::params::package_name,
+  $service_name      = $::hitch::params::service_name,
+  $config_file       = $::hitch::params::config_file,
+  $config_root       = $::hitch::params::config_root,
+  $purge_config_root = $::hitch::params::purge_config_root,
+  $frontend          = $::hitch::params::frontend,
+  $backend           = $::hitch::params::backend,
+  $write_proxy_v2    = $::hitch::params::write_proxy_v2,
+  $ciphers           = $::hitch::params::ciphers,
+  $domains           = $::hitch::params::domains,
 ) inherits ::hitch::params {
 
   # validate parameters here
