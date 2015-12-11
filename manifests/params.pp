@@ -5,9 +5,11 @@
 #
 class hitch::params {
 
-  $config_file           = '/etc/hitch/hitch.conf'
   $config_root           = '/etc/hitch'
+  $config_file           = '/etc/hitch/hitch.conf'
+  $dhparams_file         = '/etc/hitch/dhparams.pem'
   $purge_config_root     = false
+  $file_owner            = 'root'
 
   $frontend              = '[*]:443'
   $backend               = '[::1]:80'

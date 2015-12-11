@@ -20,6 +20,7 @@
 class hitch (
   $package_name      = $::hitch::params::package_name,
   $service_name      = $::hitch::params::service_name,
+  $file_owner        = $::hitch::params::file_owner,
   $config_file       = $::hitch::params::config_file,
   $config_root       = $::hitch::params::config_root,
   $purge_config_root = $::hitch::params::purge_config_root,

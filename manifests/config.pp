@@ -12,6 +12,9 @@ class hitch::config {
     ensure  => directory,
     recurse => true,
     purge   => $::hitch::purge_config_root,
+    owner   => $::hitch::file_owner,
+    group   => $::hitch::group,
+    mode    => '0750',
   }
 
   concat { $::hitch::config_file:
@@ -23,7 +26,7 @@ class hitch::config {
     command => "openssl dhparam 2048 -out ${::hitch::dhparams_file}",
   }
   file { $::hitch::dhparams_file:
-    owner => 'root',
+    owner => $::hitch::file_owner,
     group => $::hitch::group,
     mode  => '0640',
   }
