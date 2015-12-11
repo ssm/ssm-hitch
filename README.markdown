@@ -32,9 +32,10 @@ concatenated into one PEM file, and added to the configuration file.
 
 * Package "hitch"
 * Service "hitch"
-* Directory "/etc/hitch", where "hitch.conf" and a PEM file for each
-  domain, containing TLS key, certificate, ca certificate chain, and
-  dh parameters.
+* Directory "/etc/hitch"
+* Configuration file "/etc/hitch/hitch.conf"
+* A PEM file inside /etc/hitch for each domain, with TLS key,
+  certificate, ca certificate chain, and dh parameters.
 
 
 ### Setup Requirements **OPTIONAL**
@@ -138,6 +139,9 @@ hold all the TLS keys, certificates and parameters.
 
 Parameters
 
+* **ensure**: set the desired state of the resource. (optional, valid
+  values are absent or present, default is present)
+
 One of **key_content** and **key_source** is required.
 
 * **key_content**: a string containing the TLS key (no default)
@@ -151,9 +155,6 @@ One of **cert_content** and **cert_source** is required.
 * **cert_source**: source to the TLS certificate, either a file, or a
   puppet uri (no default)
 
-* **ensure**: set the desired state of the resource. (optional, valid
-  values are absent or present, default is present)
-
 No more than one of **cacert_content** and **cacert_source** must be
 specified.
 
@@ -162,9 +163,9 @@ specified.
 * **cacert_source**: source to the ca certificate chain, either a
   file, or a puppet uri (optional, no default)
 
-No more than one of **cacert_content** and **cacert_source** must be
-specified.  If not specified, the dhparams of the **hitch** class is
-used instead.
+No more than one of **dhparams_content** and **dhparams_source** must
+be specified.  If not specified, the dhparams of the **hitch** class
+is used instead.
 
 * **dhparams_content**: a string containing the ca certificate chain
   (optional, default is the dhparams of the hitch class)
