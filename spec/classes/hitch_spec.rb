@@ -18,6 +18,27 @@ describe 'hitch' do
 
           it { is_expected.to contain_service('hitch') }
           it { is_expected.to contain_package('hitch').with_ensure('present') }
+
+          it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
+          it { is_expected.to contain_concat__fragment('hitch::config config') }
+        end
+
+        context "hitch class with domains" do
+          let(:params) do
+            { :domains => {
+                'example.com' => {
+                  'key' => '-----BEGIN PRIVATE KEY-----',
+                  'cert' => '-----BEGIN CERTIFICATE-----',
+                  'cacert' => '-----BEGIN CERTIFICATE-----',
+                  'dhparams' => '-----BEGIN DH PARAMETERS-----'
+                }
+              }
+            }
+          end
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_hitch__domain('example.com') }
+          it { is_expected.to contain_file('/etc/hitch/example.com.pem') }
+          it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
         end
       end
     end
