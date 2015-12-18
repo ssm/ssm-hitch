@@ -18,7 +18,9 @@ RSpec.configure do |c|
     hosts.each do |host|
       on host, puppet('module', 'install', 'puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
-      on host, 'openssl req -newkey rsa:2048 -sha256 -keyout /tmp/example.org_key.pem  -nodes -x509 -days 365 -out /tmp/example.org_cert.pem -subj "/CN=example.org"'
+      ['example.com', 'example.org'].each do |domain|
+        on host, 'openssl req -newkey rsa:2048 -sha256 -keyout /tmp/%s_key.pem -nodes -x509 -days 365 -out /tmp/%s_cert.pem -subj "/CN=%s"' % [ domain, domain, domain ]
+      end
       on host, 'ls -l /tmp'
     end
   end
