@@ -25,7 +25,7 @@ define hitch::domain (
     fail("Hitch::Domain[${title}]: Please provide key_source or key_domain")
   }
   if $key_content {
-    validate_re($key_content, 'BEGIN PRIVATE KEY')
+    validate_re($key_content, 'PRIVATE KEY')
   }
 
   # Exactly one of $cert_content and $cert_source
@@ -33,7 +33,7 @@ define hitch::domain (
     fail("Hitch::Domain[${title}]: Please provide cert_source or cert_domain")
   }
   if $cert_content {
-    validate_re($cert_content, 'BEGIN CERTIFICATE')
+    validate_re($cert_content, 'CERTIFICATE')
   }
 
   # One or zero of $cacert_content or $cacert_source
@@ -41,7 +41,7 @@ define hitch::domain (
     fail("Hitch::Domain[${title}]: Please do not specify both cacert_source and cacert_domain")
   }
   if $cacert_content {
-    validate_re($cacert_content, 'BEGIN CERTIFICATE')
+    validate_re($cacert_content, 'CERTIFICATE')
   }
 
   # One of $dhparams_content or $dhparams_source, with fallback to
@@ -50,7 +50,7 @@ define hitch::domain (
     fail("Hitch::Domain[${title}]: Please do not specify both dhparams_source and dhparams_domain")
   }
   if $dhparams_content {
-    validate_re($dhparams_content, 'BEGIN DH PARAMETERS')
+    validate_re($dhparams_content, 'DH PARAMETERS')
   }
 
 
