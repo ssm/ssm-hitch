@@ -1,3 +1,6 @@
+2015-12-18 Release 0.1.3
+- bugfix: using multiple pem-files failed.  Tests added.
+
 2015-12-18 Release 0.1.2
 - relax too-strict validation of strings containing keys and certificates
 
