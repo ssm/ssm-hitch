@@ -80,14 +80,14 @@ define hitch::domain (
   }
 
   concat::fragment {"${title} key":
-    content => $key_content,
+    content => "${key_content}\n",
     source  => $key_source,
     target  => $pem_file,
     order   => '01',
   }
 
   concat::fragment {"${title} cert":
-    content => $cert_content,
+    content => "${cert_content}\n",
     source  => $cert_source,
     target  => $pem_file,
     order   => '02',
@@ -95,7 +95,7 @@ define hitch::domain (
 
   if ($cacert_content or $cacert_source) {
     concat::fragment {"${title} cacert":
-      content => $cacert_content,
+      content => "${cacert_content}\n",
       source  => $cacert_source,
       target  => $pem_file,
       order   => '03',
@@ -114,7 +114,7 @@ define hitch::domain (
 
   if ($dhparams_content or $_dhparams_source) {
     concat::fragment {"${title} dhparams":
-      content => $dhparams_content,
+      content => "${dhparams_content}",
       source  => $_dhparams_source,
       target  => $pem_file,
       order   => '04',
