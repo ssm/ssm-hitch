@@ -35,17 +35,17 @@ class hitch::config {
     }
   }
   else {
+    exec { "${title} generate dhparams":
+      path    => '/usr/local/bin:/usr/bin:/bin',
+      command => "openssl dhparam 2048 -out ${::hitch::dhparams_file}",
+      creates => $::hitch::dhparams_file,
+    }
+    ->
     file { $::hitch::dhparams_file:
       ensure => present,
       owner  => $::hitch::file_owner,
       group  => $::hitch::group,
       mode   => '0640',
-    }
-    ->
-    exec { "${title} generate dhparams":
-      path    => '/usr/local/bin:/usr/bin:/bin',
-      command => "openssl dhparam 2048 -out ${::hitch::dhparams_file}",
-      creates => $::hitch::dhparams_file,
     }
   }
 

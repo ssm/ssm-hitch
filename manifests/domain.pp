@@ -26,6 +26,7 @@ define hitch::domain (
   }
   if $key_content {
     validate_re($key_content, 'PRIVATE KEY')
+    $_key_content="${key_content}\n"
   }
 
   # Exactly one of $cert_content and $cert_source
@@ -34,6 +35,7 @@ define hitch::domain (
   }
   if $cert_content {
     validate_re($cert_content, 'CERTIFICATE')
+    $_cert_content="${cert_content}\n"
   }
 
   # One or zero of $cacert_content or $cacert_source
@@ -42,6 +44,7 @@ define hitch::domain (
   }
   if $cacert_content {
     validate_re($cacert_content, 'CERTIFICATE')
+    $_cacert_content="${cacert_content}\n"
   }
 
   # One of $dhparams_content or $dhparams_source, with fallback to
@@ -51,6 +54,7 @@ define hitch::domain (
   }
   if $dhparams_content {
     validate_re($dhparams_content, 'DH PARAMETERS')
+    $_dhparams_content="${dhparams_content}\n"
   }
 
 
@@ -68,6 +72,7 @@ define hitch::domain (
   concat::fragment { "hitch::domain ${title}":
     target  => $config_file,
     content => "pem-file = \"${pem_file}\"\n",
+    notify  => Class['hitch::service'],
   }
 
   # Create the pem file, with (optional) ca certificate chain, a
@@ -77,29 +82,30 @@ define hitch::domain (
     mode   => '0640',
     owner  => $::hitch::file_owner,
     group  => $::hitch::group,
+    notify => Class['hitch::service'],
   }
 
-  if ($cacert_content or $cacert_source) {
-    concat::fragment {"${title} cacert":
-      content => $cacert_content,
-      source  => $cacert_source,
-      target  => $pem_file,
-      order   => '01',
-    }
+  concat::fragment {"${title} key":
+    content => $_key_content,
+    source  => $key_source,
+    target  => $pem_file,
+    order   => '01',
   }
 
   concat::fragment {"${title} cert":
-    content => $cert_content,
+    content => $_cert_content,
     source  => $cert_source,
     target  => $pem_file,
     order   => '02',
   }
 
-  concat::fragment {"${title} key":
-    content => $key_content,
-    source  => $key_source,
-    target  => $pem_file,
-    order   => '03',
+  if ($cacert_content or $cacert_source) {
+    concat::fragment {"${title} cacert":
+      content => $_cacert_content,
+      source  => $cacert_source,
+      target  => $pem_file,
+      order   => '03',
+    }
   }
 
   if ! $dhparams_content {
@@ -114,7 +120,7 @@ define hitch::domain (
 
   if ($dhparams_content or $_dhparams_source) {
     concat::fragment {"${title} dhparams":
-      content => $dhparams_content,
+      content => $_dhparams_content,
       source  => $_dhparams_source,
       target  => $pem_file,
       order   => '04',
