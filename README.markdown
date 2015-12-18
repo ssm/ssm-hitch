@@ -38,7 +38,7 @@ concatenated into one PEM file, and added to the configuration file.
   certificate, ca certificate chain, and dh parameters.
 
 
-### Setup Requirements **OPTIONAL**
+### Setup Requirements
 
 The module requires that the "hitch" package is available in a
 reachable package repository.
