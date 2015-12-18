@@ -10,6 +10,10 @@ describe 'hitch class' do
         key_source  => '/tmp/example.org_key.pem',
         cert_source => '/tmp/example.org_cert.pem',
       }
+      hitch::domain { 'example.com':
+        key_source  => '/tmp/example.com_key.pem',
+        cert_source => '/tmp/example.com_cert.pem',
+      }
       EOS
 
       # Run it twice and test for idempotency
