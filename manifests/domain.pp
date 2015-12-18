@@ -67,7 +67,7 @@ define hitch::domain (
   # Add a line to the hitch config file
   concat::fragment { "hitch::domain ${title}":
     target  => $config_file,
-    content => "pem-file = \"${pem_file}\"",
+    content => "pem-file = \"${pem_file}\"\n",
   }
 
   # Create the pem file, with (optional) ca certificate chain, a
