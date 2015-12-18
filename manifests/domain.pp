@@ -68,6 +68,7 @@ define hitch::domain (
   concat::fragment { "hitch::domain ${title}":
     target  => $config_file,
     content => "pem-file = \"${pem_file}\"\n",
+    notify => Class['hitch::service']
   }
 
   # Create the pem file, with (optional) ca certificate chain, a
@@ -77,6 +78,7 @@ define hitch::domain (
     mode   => '0640',
     owner  => $::hitch::file_owner,
     group  => $::hitch::group,
+    notify => Class['hitch::service']
   }
 
   concat::fragment {"${title} key":
