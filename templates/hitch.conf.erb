@@ -5,11 +5,11 @@ group    = "<%= scope['hitch::params::group'] %>"
 frontend = "<%= scope['hitch::frontend'] %>"
 backend  = "<%= scope['hitch::backend'] %>"
 
-<% if @write_proxy_v2 == "on" -%>
+<% if scope['hitch::write_proxy_v2'] == "on" -%>
 # use the PROXY v2 protocol to communicate with backend
-write-proxy-v2 = "<%= @write_proxy_v2 %>"
+write-proxy-v2 = "<%= scope['hitch::write_proxy_v2'] %>"
 <% end -%>
 
 # Define a cipher list for communication
-ciphers               = "<%= @ciphers %>"
+ciphers               = "<%= scope['hitch::ciphers'] %>"
 prefer-server-ciphers = on
