@@ -1,9 +1,9 @@
 # Configuration for hitch
 
-user     = "<%= @user %>"
-group    = "<%= @group %>"
-frontend = "<%= @frontend %>"
-backend  = "<%= @backend %>"
+user     = "<%= scope['hitch::params::user'] %>"
+group    = "<%= scope['hitch::params::group'] %>"
+frontend = "<%= scope['hitch::frontend'] %>"
+backend  = "<%= scope['hitch::backend'] %>"
 
 <% if @write_proxy_v2 == "on" -%>
 # use the PROXY v2 protocol to communicate with backend
