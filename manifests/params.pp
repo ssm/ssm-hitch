@@ -19,6 +19,10 @@ class hitch::params {
   $prefer_server_ciphers = 'on'
   $domains               = {}
 
+  $tls_protos            = undef
+  $alpn_protos           = undef
+  $write_proxy           = undef
+
   case $::osfamily {
     'Debian': {
       $package_name = 'hitch'

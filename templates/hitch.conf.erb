@@ -13,3 +13,13 @@ write-proxy-v2 = "<%= @write_proxy_v2 %>"
 # Define a cipher list for communication
 ciphers               = "<%= @ciphers %>"
 prefer-server-ciphers = on
+
+<% if @alpn_protos -%>
+alpn-protos = "<%= @alpn_protos %>"
+<% end -%>
+<% if @tls_protos -%>
+tls-protos = "<%= @tls_protos %>"
+<% end -%>
+<% if @write_proxy -%>
+write-proxy = "<%= @write_proxy %>"
+<% end -%>

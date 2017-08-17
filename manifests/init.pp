@@ -31,6 +31,10 @@ class hitch (
   $write_proxy_v2    = $::hitch::params::write_proxy_v2,
   $ciphers           = $::hitch::params::ciphers,
   $domains           = $::hitch::params::domains,
+  $tls_protos        = $::hitch::params::tls_protos,
+  $alpn_protos       = $::hitch::params::alpn_protos,
+  $write_proxy       = $::hitch::params::write_proxy
+
 ) inherits ::hitch::params {
 
   # validate parameters here
