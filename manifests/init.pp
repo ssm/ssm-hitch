@@ -35,8 +35,8 @@ class hitch (
 
   # validate parameters here
 
-  class { '::hitch::install': } ->
-  class { '::hitch::config': } ~>
-  class { '::hitch::service': } ->
-  Class['::hitch']
+  class { '::hitch::install': }
+  -> class { '::hitch::config': }
+  ~> class { '::hitch::service': }
+  -> Class['::hitch']
 }

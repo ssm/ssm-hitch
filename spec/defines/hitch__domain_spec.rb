@@ -9,7 +9,7 @@ describe 'hitch::domain' do
         end
         let(:title) { 'example.com' }
 
-        context "with all content parameters" do
+        context 'with all content parameters' do
           let(:params) do
             {
               'cacert_content' => '-----BEGIN CERTIFICATE-----',
@@ -18,6 +18,7 @@ describe 'hitch::domain' do
               'key_content' => '-----BEGIN PRIVATE KEY-----',
             }
           end
+
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_hitch__domain('example.com') }
 
@@ -33,7 +34,7 @@ describe 'hitch::domain' do
           it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
         end
 
-        context "with all source parameters" do
+        context 'with all source parameters' do
           let(:params) do
             {
               'cacert_source' => '/tmp/cacert.pem',
@@ -42,6 +43,7 @@ describe 'hitch::domain' do
               'key_source' => '/tmp/key.pem',
             }
           end
+
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_hitch__domain('example.com') }
 
@@ -57,13 +59,14 @@ describe 'hitch::domain' do
           it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
         end
 
-        context "mandatory parameters" do
+        context 'mandatory parameters' do
           let(:params) do
             {
               'cert_source' => '/tmp/cert.pem',
               'key_source' => '/tmp/key.pem',
             }
           end
+
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_hitch__domain('example.com') }
 

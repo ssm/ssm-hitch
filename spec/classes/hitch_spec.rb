@@ -8,7 +8,7 @@ describe 'hitch' do
           facts
         end
 
-        context "hitch class without any parameters" do
+        context 'hitch class without any parameters' do
           it { is_expected.to compile.with_all_deps }
 
           it { is_expected.to contain_class('hitch') }
@@ -26,7 +26,7 @@ describe 'hitch' do
           it { is_expected.to contain_concat__fragment('hitch::config config') }
           it { is_expected.to contain_exec('hitch::config generate dhparams') }
 
-          context "osfamily specifics" do
+          context 'osfamily specifics' do
             if facts[:osfamily] == 'RedHat'
               it { is_expected.to contain_package('epel-release') }
             else
@@ -35,19 +35,18 @@ describe 'hitch' do
           end
         end
 
-
-        context "hitch class with domains" do
+        context 'hitch class with domains' do
           let(:params) do
-            { :domains => {
-                'example.com' => {
-                  'key_content' => '-----BEGIN PRIVATE KEY-----',
-                  'cert_content' => '-----BEGIN CERTIFICATE-----',
-                  'cacert_content' => '-----BEGIN CERTIFICATE-----',
-                  'dhparams_content' => '-----BEGIN DH PARAMETERS-----'
-                }
-              }
-            }
+            { domains: {
+              'example.com' => {
+                'key_content' => '-----BEGIN PRIVATE KEY-----',
+                'cert_content' => '-----BEGIN CERTIFICATE-----',
+                'cacert_content' => '-----BEGIN CERTIFICATE-----',
+                'dhparams_content' => '-----BEGIN DH PARAMETERS-----',
+              },
+            } }
           end
+
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_hitch__domain('example.com') }
           it { is_expected.to contain_file('/etc/hitch/example.com.pem') }
@@ -61,12 +60,12 @@ describe 'hitch' do
     describe 'hitch class without any parameters on Solaris/Nexenta' do
       let(:facts) do
         {
-          :osfamily        => 'Solaris',
-          :operatingsystem => 'Nexenta',
+          osfamily: 'Solaris',
+          operatingsystem: 'Nexenta',
         }
       end
 
-      it { expect { is_expected.to contain_package('hitch') }.to raise_error(Puppet::Error, /Nexenta not supported/) }
+      it { expect { is_expected.to contain_package('hitch') }.to raise_error(Puppet::Error, %r{Nexenta not supported}) }
     end
   end
 end
