@@ -7,7 +7,7 @@ class hitch::install (
 ) {
 
   if $::osfamily == 'RedHat' {
-    ensure_packages(['epel-release'])
+    ensure_resource('package', 'epel-release', { 'ensure' => 'present' })
     Package['epel-release'] -> Package[$package]
   }
 
