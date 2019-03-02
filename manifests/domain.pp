@@ -1,78 +1,78 @@
 # == Define hitch::domain
 #
 # This define installs pem files to the config root, and configures
-# them in the hitch config file
+# them in the hitch config file.
+#
+# The CA certificate (if present), server certificate, key and DH
+# parameters are concatenated, and placed in the hitch configuration.
+#
+# You can specify cacert, cert and key with either _content or _source
+# suffix.
+#
+# Parameters:
+#
+# @param ensure [Enum['present','absent']]
+#   The desired state of the hitch domain.  Default is 'present'.
+#
+# @param default [Boolean]
+#   If there are multiple domains, set this to true to make this the
+#   default domain used by hitch.  If there is only one domain, it
+#   will be the default domain no matter what you set here. Defaults
+#   to false.
+#
+# @param [Optional[String]] cacert_content
+#   A PEM encoded CA certificate.
+#
+# @param [Optional[Stdlib::Filesource]] cacert_source
+#   Path to a PEM encoded CA certificate.
+#
+# @param [Optional[String]] cert_content
+#   A PEM encoded certificate. This must be a certificate matching the
+#   key.
+#
+# @param [Optional[Stdlib::Filesource]] cert_source
+#   Path to a PEM encoded certificate. This must be a certificate
+#   matching the key.
+#
+# @param [Optional[String]] key_content
+#   A PEM encoded key. This must be a key matching the certificate.
+#
+# @param [Optional[Stdlib::Filesource]] key_source
+#   Path to a PEM encoded key. This must be a key matching the
+#   certificate.
 #
 define hitch::domain (
-  $ensure           = present,
-  $cacert_content   = undef,
-  $cacert_source    = undef,
-  $cert_content     = undef,
-  $cert_source      = undef,
-  $dhparams_content = undef,
-  $dhparams_source  = undef,
-  $key_content      = undef,
-  $key_source       = undef,
+  Enum['present', 'absent'] $ensure = present,
+  Boolean $default = false,
+  Optional[String] $cert_content = undef,
+  Optional[String] $key_content = undef,
+  Optional[String] $cacert_content = undef,
+  Optional[Stdlib::Filesource] $cert_source = undef,
+  Optional[Stdlib::Filesource] $key_source = undef,
+  Optional[Stdlib::Filesource] $cacert_source = undef,
+
 )
 {
 
-  # Parameter validation
-
-  validate_re($ensure, ['^present$', '^absent$'])
-
-  # Exactly one of $key_source and $key_content
-  if ($key_content and $key_source) or (! $key_content and ! $key_source) {
-    fail("Hitch::Domain[${title}]: Please provide key_source or key_domain")
+  if ($key_content and $cert_content) {
+    validate_x509_rsa_key_pair($cert_content, $key_content)
   }
-  if $key_content {
-    validate_re($key_content, 'PRIVATE KEY')
-    $_key_content="${key_content}\n"
-  }
-
-  # Exactly one of $cert_content and $cert_source
-  if ($cert_content and $cert_source) or (!$cert_content and !$cert_source) {
-    fail("Hitch::Domain[${title}]: Please provide cert_source or cert_domain")
-  }
-  if $cert_content {
-    validate_re($cert_content, 'CERTIFICATE')
-    $_cert_content="${cert_content}\n"
-  }
-
-  # One or zero of $cacert_content or $cacert_source
-  if ($cacert_content and $cacert_source) {
-    fail("Hitch::Domain[${title}]: Please do not specify both cacert_source and cacert_domain")
-  }
-  if $cacert_content {
-    validate_re($cacert_content, 'CERTIFICATE')
-    $_cacert_content="${cacert_content}\n"
-  }
-
-  # One of $dhparams_content or $dhparams_source, with fallback to
-  # $::hitch::dhparams_file
-  if ($dhparams_content and $dhparams_source) {
-    fail("Hitch::Domain[${title}]: Please do not specify both dhparams_source and dhparams_domain")
-  }
-  if $dhparams_content {
-    validate_re($dhparams_content, 'DH PARAMETERS')
-    $_dhparams_content="${dhparams_content}\n"
-  }
-
 
   include ::hitch
-  include ::hitch::config
 
-  $config_file = $::hitch::config_file
-  validate_absolute_path($config_file)
+  $config_root = $hitch::config_root
+  $config_file = $hitch::config_file
+  $dhparams_file = $hitch::dhparams_file
+  $pem_file="${config_root}/${title}.pem"
 
-  $pem_file="${::hitch::config_root}/${title}.pem"
-  validate_absolute_path($pem_file)
-
+  Concat::Fragment {
+    notify  => Class['hitch::service'],
+  }
 
   # Add a line to the hitch config file
   concat::fragment { "hitch::domain ${title}":
     target  => $config_file,
     content => "pem-file = \"${pem_file}\"\n",
-    notify  => Class['hitch::service'],
   }
 
   # Create the pem file, with (optional) ca certificate chain, a
@@ -86,44 +86,31 @@ define hitch::domain (
   }
 
   concat::fragment {"${title} key":
-    content => $_key_content,
-    source  => $key_source,
     target  => $pem_file,
     order   => '01',
+    content => $key_content,
+    source  => $key_source,
   }
 
   concat::fragment {"${title} cert":
-    content => $_cert_content,
-    source  => $cert_source,
     target  => $pem_file,
     order   => '02',
+    content => $cert_content,
+    source  => $cert_source,
   }
 
   if ($cacert_content or $cacert_source) {
     concat::fragment {"${title} cacert":
-      content => $_cacert_content,
-      source  => $cacert_source,
       target  => $pem_file,
       order   => '03',
+      content => $cacert_content,
+      source  => $cacert_source,
     }
   }
 
-  if ! $dhparams_content {
-    if $dhparams_source {
-      $_dhparams_source = $dhparams_source
-    }
-    else {
-      $_dhparams_source = $::hitch::dhparams_file
-      File[$::hitch::dhparams_file] -> Concat::Fragment["${title} dhparams"]
-    }
-  }
-
-  if ($dhparams_content or $_dhparams_source) {
-    concat::fragment {"${title} dhparams":
-      content => $_dhparams_content,
-      source  => $_dhparams_source,
-      target  => $pem_file,
-      order   => '04',
-    }
+  concat::fragment {"${title} dhparams":
+    target => $pem_file,
+    source => $dhparams_file,
+    order  => '04',
   }
 }

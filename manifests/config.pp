@@ -2,57 +2,62 @@
 #
 # This class is called from hitch for service config.
 #
-class hitch::config {
+# @api private
+class hitch::config (
+  Stdlib::Absolutepath $config_root,
+  Stdlib::Absolutepath $config_file,
+  Stdlib::Absolutepath $dhparams_file,
+  Boolean $purge_config_root,
+  String $file_owner,
+  String $user,
+  String $group,
+  String $dhparams_content,
+  String $write_proxy_v2,
+  String $frontend,
+  String $backend,
+  String $ciphers,
+) {
 
-  validate_absolute_path($::hitch::config_root)
-  validate_absolute_path($::hitch::config_file)
-  validate_absolute_path($::hitch::dhparams_file)
-
-  if $::hitch::dhparams_content {
-    validate_re($::hitch::dhparams_content, 'BEGIN DH PARAMETERS')
-  }
-
-  file { $::hitch::config_root:
+  file { $config_root:
     ensure  => directory,
     recurse => true,
-    purge   => $::hitch::purge_config_root,
-    owner   => $::hitch::file_owner,
-    group   => $::hitch::group,
+    purge   => $purge_config_root,
+    owner   => $file_owner,
+    group   => $group,
     mode    => '0750',
   }
 
-  concat { $::hitch::config_file:
+  concat { $config_file:
     ensure => present,
   }
 
-  if $::hitch::dhparams_content {
-    file { $::hitch::dhparams_file:
+  if $dhparams_content {
+    file { $dhparams_file:
       ensure  => present,
-      owner   => $::hitch::file_owner,
-      group   => $::hitch::group,
+      owner   => $file_owner,
+      group   => $group,
       mode    => '0640',
-      content => $::hitch::dhparams_content,
+      content => $dhparams_content,
     }
   }
   else {
     exec { "${title} generate dhparams":
       path    => '/usr/local/bin:/usr/bin:/bin',
-      command => "openssl dhparam 2048 -out ${::hitch::dhparams_file}",
-      creates => $::hitch::dhparams_file,
+      command => "openssl dhparam 2048 -out ${dhparams_file}",
+      creates => $dhparams_file,
     }
-    
-    -> file { $::hitch::dhparams_file:
+
+    -> file { $dhparams_file:
       ensure => present,
-      owner  => $::hitch::file_owner,
-      group  => $::hitch::group,
+      owner  => $file_owner,
+      group  => $group,
       mode   => '0640',
     }
   }
 
   concat::fragment { "${title} config":
     content => template('hitch/hitch.conf.erb'),
-    target  => $::hitch::config_file,
+    target  => $config_file,
   }
 
-  create_resources('hitch::domain', $::hitch::domains)
 }

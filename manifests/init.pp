@@ -6,37 +6,82 @@
 # Parameters
 # ----------
 #
-# * `package_name`
-#   Package name for installing hitch
+# @param package_name [String]
+#   Package name for installing hitch.
 #
-# * `service_name`
-#   Service name for the hitch service
+# @param service_name [String]
+#   Service name for the hitch service.
 #
-# * `config_file`
-#   Configuration file. Default: /etc/hitch/hitch.conf
+# @param user [String]
+#   User running the service.
 #
-# * `config_root`
+# @param group [String]
+#   Group running the service.
+#
+# @param file_owner [String]
+#   User owning the configuration files. Defaults to "root".
+#
+# @param dhparams_file [Stdlib::Absolutepath]
+#   Path to file for Diffie-Hellman parameters, which are shared
+#   by all domains.
+#
+# @param dhparams_content [Optional[String]]
+#   Content for the DH parameter file.  If unset, DH parameters will
+#   be generated on the node, which may take a long time.
+#
+# @param config_root [Stdlib::Absolutepath]
 #   Configuration root directory. Default: /etc/hitch/
+#
+# @param purge_config_root [Boolean]
+#   If true, will delete all unmanaged files from the config_root.
+#   Defaults to false.
+#
+# @param frontend[String]
+#   The listening frontend for hitch.
+
 class hitch (
-  $package_name      = $::hitch::params::package_name,
-  $service_name      = $::hitch::params::service_name,
-  $file_owner        = $::hitch::params::file_owner,
-  $config_file       = $::hitch::params::config_file,
-  $dhparams_file     = $::hitch::params::dhparams_file,
-  $dhparams_content  = $::hitch::params::dhparams,
-  $config_root       = $::hitch::params::config_root,
-  $purge_config_root = $::hitch::params::purge_config_root,
-  $frontend          = $::hitch::params::frontend,
-  $backend           = $::hitch::params::backend,
-  $write_proxy_v2    = $::hitch::params::write_proxy_v2,
-  $ciphers           = $::hitch::params::ciphers,
-  $domains           = $::hitch::params::domains,
-) inherits ::hitch::params {
+  String $package_name,
+  String $service_name,
+  String $user,
+  String $group,
+  String $file_owner,
+  Stdlib::Absolutepath $config_file,
+  Stdlib::Absolutepath $dhparams_file,
+  Stdlib::Absolutepath $config_root,
+  Boolean $purge_config_root,
+  String $frontend,
+  String $backend,
+  String $write_proxy_v2,
+  String $ciphers,
+  Optional[Hash] $domains,
+  Optional[String] $dhparams_content = undef,
+) {
 
-  # validate parameters here
-
-  class { '::hitch::install': }
-  -> class { '::hitch::config': }
-  ~> class { '::hitch::service': }
+  class { '::hitch::install':
+    package => $package_name
+  }
+  -> class { '::hitch::config':
+    config_root       => $config_root,
+    config_file       => $config_file,
+    dhparams_file     => $dhparams_file,
+    dhparams_content  => $dhparams_content,
+    purge_config_root => $purge_config_root,
+    file_owner        => $file_owner,
+    user              => $user,
+    group             => $group,
+    frontend          => $frontend,
+    backend           => $backend,
+    write_proxy_v2    => $write_proxy_v2,
+    ciphers           => $ciphers,
+  }
+  ~> class { '::hitch::service':
+    service_name => $service_name,
+  }
   -> Class['::hitch']
+
+  $domains.each |$domain_title, $domain_params| {
+    hitch::domain { $domain_title:
+      * => $domain_params
+    }
+  }
 }

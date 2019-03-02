@@ -1,86 +1,61 @@
 require 'spec_helper'
 
+tls_data = gen_test_tls_data
+key = tls_data[0].to_s
+cert = tls_data[1].to_s
+
 describe 'hitch::domain' do
-  context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
-      context "on #{os}" do
-        let(:facts) do
-          facts
-        end
-        let(:title) { 'example.com' }
+  let(:title) { 'example.com' }
 
-        context 'with all content parameters' do
-          let(:params) do
-            {
-              'cacert_content' => '-----BEGIN CERTIFICATE-----',
-              'cert_content' => '-----BEGIN CERTIFICATE-----',
-              'dhparams_content' => '-----BEGIN DH PARAMETERS-----',
-              'key_content' => '-----BEGIN PRIVATE KEY-----',
-            }
-          end
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      let(:facts) { os_facts }
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_hitch__domain('example.com') }
-
-          # for the pem file
-          it { is_expected.to contain_concat('/etc/hitch/example.com.pem') }
-          it { is_expected.to contain_concat__fragment('example.com cacert') }
-          it { is_expected.to contain_concat__fragment('example.com cert') }
-          it { is_expected.to contain_concat__fragment('example.com key') }
-          it { is_expected.to contain_concat__fragment('example.com dhparams') }
-
-          # for the config file
-          it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
-          it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
+      context 'with source parameters' do
+        let(:params) do
+          {
+            'key_source' => '/path/to/key',
+            'cert_source' => '/path/to/certificate',
+            'cacert_source' => '/path/to/cacertificate',
+          }
         end
 
-        context 'with all source parameters' do
-          let(:params) do
-            {
-              'cacert_source' => '/tmp/cacert.pem',
-              'cert_source' => '/tmp/cert.pem',
-              'dhparams_source' => '/tmp/dhparams.pem',
-              'key_source' => '/tmp/key.pem',
-            }
-          end
+        it { is_expected.to compile }
+        it { is_expected.to contain_hitch__domain('example.com') }
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_hitch__domain('example.com') }
+        # for the pem file
+        it { is_expected.to contain_concat('/etc/hitch/example.com.pem') }
+        it { is_expected.to contain_concat__fragment('example.com cacert') }
+        it { is_expected.to contain_concat__fragment('example.com cert') }
+        it { is_expected.to contain_concat__fragment('example.com key') }
+        it { is_expected.to contain_concat__fragment('example.com dhparams') }
 
-          # for the pem file
-          it { is_expected.to contain_concat('/etc/hitch/example.com.pem') }
-          it { is_expected.to contain_concat__fragment('example.com cacert') }
-          it { is_expected.to contain_concat__fragment('example.com cert') }
-          it { is_expected.to contain_concat__fragment('example.com key') }
-          it { is_expected.to contain_concat__fragment('example.com dhparams') }
+        # for the config file
+        it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
+        it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
+      end
 
-          # for the config file
-          it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
-          it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
+      context 'with content parameters' do
+        let(:params) do
+          {
+            key_content: key,
+            cert_content: cert,
+          }
         end
 
-        context 'mandatory parameters' do
-          let(:params) do
-            {
-              'cert_source' => '/tmp/cert.pem',
-              'key_source' => '/tmp/key.pem',
-            }
-          end
+        it { is_expected.to compile }
+        it { is_expected.to contain_hitch__domain('example.com') }
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_hitch__domain('example.com') }
+        # for the pem file
+        it { is_expected.to contain_concat('/etc/hitch/example.com.pem') }
+        it { is_expected.not_to contain_concat__fragment('example.com cacert') }
+        it { is_expected.to contain_concat__fragment('example.com cert') }
+        it { is_expected.to contain_concat__fragment('example.com key') }
+        it { is_expected.to contain_concat__fragment('example.com dhparams') }
 
-          # for the pem file
-          it { is_expected.to contain_concat('/etc/hitch/example.com.pem') }
-          it { is_expected.not_to contain_concat__fragment('example.com cacert') }
-          it { is_expected.to contain_concat__fragment('example.com cert') }
-          it { is_expected.to contain_concat__fragment('example.com key') }
-          it { is_expected.to contain_concat__fragment('example.com dhparams') }
-
-          # for the config file
-          it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
-          it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
-        end
+        # for the config file
+        it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
+        it { is_expected.to contain_concat__fragment('hitch::domain example.com') }
       end
     end
   end
