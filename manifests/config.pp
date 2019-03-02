@@ -60,5 +60,4 @@ class hitch::config (
     target  => $config_file,
   }
 
-  create_resources('hitch::domain', $::hitch::domains)
 }

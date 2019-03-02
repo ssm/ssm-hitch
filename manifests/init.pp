@@ -78,4 +78,10 @@ class hitch (
     service_name => $service_name,
   }
   -> Class['::hitch']
+
+  $domains.each |$domain_title, $domain_params| {
+    hitch::domain { $domain_title:
+      * => $domain_params
+    }
+  }
 }
