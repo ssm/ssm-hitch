@@ -11,7 +11,7 @@ class hitch::config (
   String $file_owner,
   String $user,
   String $group,
-  String $dhparams_content,
+  Optional[String] $dhparams_content,
   Enum['on','off'] $write_proxy_v2,
   String $frontend,
   String $backend,
@@ -43,7 +43,7 @@ class hitch::config (
   else {
     exec { "${title} generate dhparams":
       path    => '/usr/local/bin:/usr/bin:/bin',
-      command => "openssl dhparam 2048 -out ${dhparams_file}",
+      command => "openssl dhparam -out ${dhparams_file} 2048",
       creates => $dhparams_file,
     }
 

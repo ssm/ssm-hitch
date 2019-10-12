@@ -4,7 +4,7 @@ hitch::service_name: "hitch"
 hitch::config_root: "/etc/hitch"
 hitch::config_file: "/etc/hitch/hitch.conf"
 hitch::dhparams_file: "/etc/hitch/dhparams.pem"
-hitch::dhparams_content: undef
+hitch::dhparams_content: :undef
 hitch::purge_config_root: false
 hitch::file_owner: "root"
 hitch::frontend: "[*]:443"

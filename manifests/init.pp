@@ -54,7 +54,7 @@ class hitch (
   Enum['on', 'off'] $write_proxy_v2,
   String $ciphers,
   Optional[Hash] $domains,
-  Optional[String] $dhparams_content = undef,
+  Optional[String] $dhparams_content,
 ) {
 
   class { '::hitch::install':
