@@ -81,7 +81,7 @@ class hitch (
 
   $domains.each |$domain_title, $domain_params| {
     hitch::domain { $domain_title:
-      * => $domain_params
+      * => $domain_params,
     }
   }
 }
