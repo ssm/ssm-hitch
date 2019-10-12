@@ -179,8 +179,8 @@ is used instead.
 
 ## Limitations
 
-Hitch is available in EPEL 7 for OS Family RedHat, and will be
-available in Debian 9.
+You need to define at least one `hitch::domain`, or the `hitch`
+service will not start.
 
 ## Development
 

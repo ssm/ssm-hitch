@@ -4,8 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [0.1.5] - 2019-10-22
+### Fixed
+- Fix generation of DH parameters (again).
+
+### Added
+- Add manage_repo parameter. Defaults to true on RedHat OS family,
+  which will install the "epel-repo" package.
+
 ### Changed
+- Update OS support metadata. Debian 9-10 and RedHat 7-8.
+- Updated with PDK 1.14.0
 - Depends on Puppet 4.10, puppetlabs/stdlib 4.12.0
 - Module defaults are now in Hiera data
 - Module parameters use Types for validation
