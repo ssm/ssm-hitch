@@ -1,3 +1,4 @@
 ---
 hitch::user: "hitch"
 hitch::group: "hitch"
+hitch::manage_repo: true

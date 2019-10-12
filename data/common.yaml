@@ -13,3 +13,4 @@ hitch::write_proxy_v2: "off"
 hitch::ciphers: "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
 hitch::prefer_server_ciphers: "on"
 hitch::domains: {}
+hitch::manage_repo: false

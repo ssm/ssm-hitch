@@ -38,7 +38,10 @@
 #
 # @param frontend[String]
 #   The listening frontend for hitch.
-
+#
+# @param manage_repo [Boolean]
+#    If true, install the EPEL repository on RedHat OS family.
+#
 class hitch (
   String $package_name,
   String $service_name,
@@ -55,10 +58,12 @@ class hitch (
   String $ciphers,
   Optional[Hash] $domains,
   Optional[String] $dhparams_content,
+  Boolean $manage_repo,
 ) {
 
   class { '::hitch::install':
-    package => $package_name
+    package     => $package_name,
+    manage_repo => $manage_repo,
   }
   -> class { '::hitch::config':
     config_root       => $config_root,

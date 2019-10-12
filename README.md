@@ -132,6 +132,10 @@ Parameters
 * **domains**: A hash used to create hitch::domain resources, for use
   with hiera. (optional, default {})
 
+* **manage_repo**: If true, install installs the `epel-release`
+  package on Red Hat OS family so Hitch can be installed. (optional,
+  default true on RedHat, otherwise false)
+
 ### define: hitch::domain
 
 Configure a domain in hitch.conf, and generate the PEM file used to
