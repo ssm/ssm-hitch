@@ -51,7 +51,7 @@ class hitch (
   Boolean $purge_config_root,
   String $frontend,
   String $backend,
-  String $write_proxy_v2,
+  Enum['on', 'off'] $write_proxy_v2,
   String $ciphers,
   Optional[Hash] $domains,
   Optional[String] $dhparams_content = undef,

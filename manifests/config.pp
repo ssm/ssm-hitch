@@ -12,7 +12,7 @@ class hitch::config (
   String $user,
   String $group,
   String $dhparams_content,
-  String $write_proxy_v2,
+  Enum['on','off'] $write_proxy_v2,
   String $frontend,
   String $backend,
   String $ciphers,
