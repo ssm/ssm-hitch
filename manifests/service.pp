@@ -13,4 +13,10 @@ class hitch::service (
     hasstatus  => true,
     hasrestart => true,
   }
+
+  # configure hitch.service
+  systemd::dropin_file { 'limits.conf':
+    unit    => 'hitch.service',
+    content => template('hitch/limits.conf.erb'),
+  }
 }

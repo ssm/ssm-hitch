@@ -2,14 +2,34 @@
 
 user     = "<%= @user %>"
 group    = "<%= @group %>"
-frontend = "<%= @frontend %>"
+<% if @frontend_string -%>
+frontend = "<%= @frontend_string %>"
+<% end -%>
+<% if @frontend_array -%>
+<% @frontend_array.each do |frontend| -%>
+frontend = "<%= frontend %>"
+<% end -%>
+<% end -%>
 backend  = "<%= @backend %>"
-
+<% if @workers == 'auto' && @facts['processors']['count'] -%>
+workers  = <%= @facts['processors']['count'] %>
+<% elsif @workers.respond_to?(:to_i) -%>
+workers  = <%= @workers %>
+<% end -%>
 <% if @write_proxy_v2 == "on" -%>
 # use the PROXY v2 protocol to communicate with backend
 write-proxy-v2 = "<%= @write_proxy_v2 %>"
 <% end -%>
-
+<% if @alpn_protos -%>
+alpn-protos = "<%= @alpn_protos %>"
+<% end -%>
+<% if @tls_protos %>
+tls-protos = <%= @tls_protos %>
+<% end -%>
+<% if @ciphers.length > 0 -%>
 # Define a cipher list for communication
 ciphers               = "<%= @ciphers %>"
-prefer-server-ciphers = on
+<% end -%>
+<% if @prefer_server_ciphers -%>
+prefer-server-ciphers = <%= @prefer_server_ciphers %>
+<% end -%>
