@@ -18,17 +18,35 @@ describe 'hitch::config' do
           frontend: '[*]:443',
           backend: '[::1]:80',
           ciphers: 'MODERN',
+          workers: 'auto',
+          prefer_server_ciphers: 'on',
         }
       end
 
-      it { is_expected.to compile }
-      it { is_expected.to contain_file('/etc/hitch') }
+      context 'defaults' do
+        it { is_expected.to compile }
+        it { is_expected.to contain_file('/etc/hitch') }
 
-      it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
-      it { is_expected.to contain_concat__fragment('hitch::config config') }
+        it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
+        it { is_expected.to contain_concat__fragment('hitch::config config') }
 
-      it { is_expected.to contain_file('/etc/hitch/dhparams.pem') }
-      it { is_expected.to contain_exec('hitch::config generate dhparams') }
+        it { is_expected.to contain_file('/etc/hitch/dhparams.pem') }
+        it { is_expected.to contain_exec('hitch::config generate dhparams') }
+      end
+
+      context 'with frontend as array of strings' do
+        let(:params) do
+          super().merge(frontend: ['[192.0.2.1]:443', '[192.0.2.2]:443'])
+        end
+
+        it { is_expected.to compile }
+        it { is_expected.to contain_concat('/etc/hitch/hitch.conf') }
+        it {
+          is_expected.to contain_concat__fragment('hitch::config config')
+            .with_content(%r{^frontend = "\[192\.0\.2\.1\]:443"$})
+            .with_content(%r{^frontend = "\[192\.0\.2\.2\]:443"$})
+        }
+      end
     end
   end
 end
