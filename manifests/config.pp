@@ -11,15 +11,15 @@ class hitch::config (
   String $file_owner,
   String $user,
   String $group,
-  Optional[String] $dhparams_content,
   Enum['on','off'] $write_proxy_v2,
   Variant[String, Array] $frontend,
   String $backend,
   String $ciphers,
   Variant[Integer, Enum['auto']] $workers,
   Enum['on','off'] $prefer_server_ciphers,
-  Optional[String] $alpn_protos,
-  Optional[String] $tls_protos,
+  Optional[String] $dhparams_content = undef,
+  Optional[String] $alpn_protos = undef,
+  Optional[String] $tls_protos = undef,
 ) {
 
   case $frontend {
