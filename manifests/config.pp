@@ -22,12 +22,16 @@ class hitch::config (
   Optional[String] $tls_protos,
 ) {
 
-  if is_array($frontend) {
-    $frontend_array = $frontend
-  } elsif is_string($frontend) {
-    $frontend_string = $frontend
-  } else {
-    notify {'invalid $frontend': }
+  case $frontend {
+    Array: {
+      $frontend_array = $frontend
+    }
+    String: {
+      $frontend_string = $frontend
+    }
+    default: {
+      fail('invalid frontend')
+    }
   }
 
   file { $config_root:
