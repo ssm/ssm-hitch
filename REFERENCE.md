@@ -50,23 +50,31 @@ Data type: `String`
 
 Package name for installing hitch.
 
+Default value: `'hitch'`
+
 ##### `service_name`
 
 Data type: `String`
 
 Service name for the hitch service.
 
+Default value: `'hitch'`
+
 ##### `user`
 
 Data type: `String`
 
-User running the service.
+User running the service. Defaults vary by OS, see module hieradata.
+
+Default value: `'hitch'`
 
 ##### `group`
 
 Data type: `String`
 
-Group running the service.
+Group running the service. Defaults vary by OS, see module hieradata.
+
+Default value: `'hitch'`
 
 ##### `backend`
 
@@ -74,17 +82,23 @@ Data type: `String`
 
 Where to proxy requests.
 
+Default value: `'[::1]:80'`
+
 ##### `config_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Path to the hitch configuration file.
 
+Default value: `'/etc/hitch/hitch.conf'`
+
 ##### `file_owner`
 
 Data type: `String`
 
 User owning the configuration files. Defaults to "root".
+
+Default value: `'root'`
 
 ##### `dhparams_file`
 
@@ -93,12 +107,16 @@ Data type: `Stdlib::Absolutepath`
 Path to file for Diffie-Hellman parameters, which are shared
 by all domains.
 
+Default value: `'/etc/hitch/dhparams.pem'`
+
 ##### `dhparams_content`
 
 Data type: `Optional[String]`
 
 Content for the DH parameter file.  If unset, DH parameters will
 be generated on the node, which may take a long time.
+
+Default value: ``undef``
 
 ##### `config_root`
 
@@ -107,6 +125,8 @@ Data type: `Stdlib::Absolutepath`
 Configuration root directory. The hitch::domain defined type
 will place certificates here.
 
+Default value: `'/etc/hitch'`
+
 ##### `purge_config_root`
 
 Data type: `Boolean`
@@ -114,17 +134,23 @@ Data type: `Boolean`
 If true, will delete all unmanaged files from the config_root.
 Defaults to false.
 
+Default value: ``false``
+
 ##### `frontend`
 
 Data type: `Variant[String, Array]`
 
 The listening frontend(s) for hitch.
 
+Default value: `'[*]:443'`
+
 ##### `manage_repo`
 
 Data type: `Boolean`
 
-If true, install the EPEL repository on RedHat OS family.
+If true, install the EPEL repository on RedHat OS family. Defaults vary by OS, see module hieradata.
+
+Default value: ``false``
 
 ##### `write_proxy_v2`
 
@@ -132,11 +158,15 @@ Data type: `Enum['on', 'off']`
 
 
 
+Default value: `'off'`
+
 ##### `ciphers`
 
 Data type: `String`
 
 
+
+Default value: `'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH'`
 
 ##### `domains`
 
@@ -144,11 +174,15 @@ Data type: `Optional[Hash]`
 
 
 
+Default value: `{}`
+
 ##### `workers`
 
 Data type: `Variant[Integer, Enum['auto']]`
 
 
+
+Default value: `'auto'`
 
 ##### `prefer_server_ciphers`
 
@@ -156,17 +190,23 @@ Data type: `Enum['on','off']`
 
 
 
+Default value: `'on'`
+
 ##### `alpn_protos`
 
 Data type: `Optional[String]`
 
 
 
+Default value: `'http/1.1'`
+
 ##### `tls_protos`
 
 Data type: `Optional[String]`
 
 
+
+Default value: ``undef``
 
 ## Defined types
 

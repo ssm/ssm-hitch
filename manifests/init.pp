@@ -17,10 +17,10 @@
 #   Service name for the hitch service.
 #
 # @param user
-#   User running the service.
+#   User running the service. Defaults vary by OS, see module hieradata.
 #
 # @param group
-#   Group running the service.
+#   Group running the service. Defaults vary by OS, see module hieradata.
 #
 # @param backend
 #   Where to proxy requests.
@@ -43,7 +43,6 @@
 #   Configuration root directory. The hitch::domain defined type
 #   will place certificates here.
 #
-#
 # @param purge_config_root
 #   If true, will delete all unmanaged files from the config_root.
 #   Defaults to false.
@@ -52,29 +51,29 @@
 #   The listening frontend(s) for hitch.
 #
 # @param manage_repo
-#    If true, install the EPEL repository on RedHat OS family.
+#    If true, install the EPEL repository on RedHat OS family. Defaults vary by OS, see module hieradata.
 #
 class hitch (
-  String $package_name,
-  String $service_name,
-  String $user,
-  String $group,
-  String $file_owner,
-  Stdlib::Absolutepath $config_file,
-  Stdlib::Absolutepath $dhparams_file,
-  Stdlib::Absolutepath $config_root,
-  Boolean $purge_config_root,
-  Variant[String, Array] $frontend,
-  String $backend,
-  Enum['on', 'off'] $write_proxy_v2,
-  String $ciphers,
-  Optional[Hash] $domains,
-  Optional[String] $dhparams_content,
-  Boolean $manage_repo,
-  Variant[Integer, Enum['auto']] $workers,
-  Enum['on','off'] $prefer_server_ciphers,
-  Optional[String] $alpn_protos,
-  Optional[String] $tls_protos,
+  String $user = 'hitch',
+  String $group = 'hitch',
+  String $package_name = 'hitch',
+  String $service_name = 'hitch',
+  String $file_owner = 'root',
+  Stdlib::Absolutepath $config_file = '/etc/hitch/hitch.conf',
+  Stdlib::Absolutepath $dhparams_file = '/etc/hitch/dhparams.pem',
+  Stdlib::Absolutepath $config_root = '/etc/hitch',
+  Boolean $purge_config_root = false,
+  Variant[String, Array] $frontend = '[*]:443',
+  String $backend = '[::1]:80',
+  Enum['on', 'off'] $write_proxy_v2 = 'off',
+  String $ciphers = 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH',
+  Optional[Hash] $domains = {},
+  Optional[String] $dhparams_content = undef,
+  Boolean $manage_repo = false,
+  Variant[Integer, Enum['auto']] $workers = 'auto',
+  Enum['on','off'] $prefer_server_ciphers = 'on',
+  Optional[String] $alpn_protos = 'http/1.1',
+  Optional[String] $tls_protos = undef,
 ) {
 
   class { '::hitch::install':
