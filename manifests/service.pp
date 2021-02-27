@@ -3,6 +3,7 @@
 # This class is meant to be called from hitch.
 # It ensure the service is running.
 #
+# @api private
 class hitch::service (
   String $service_name,
 ) {

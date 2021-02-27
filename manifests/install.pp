@@ -2,6 +2,7 @@
 #
 # This class is called from hitch for install.
 #
+# @api private
 class hitch::install (
   String $package,
   Boolean $manage_repo,
