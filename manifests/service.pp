@@ -7,15 +7,19 @@ class hitch::service (
 ) {
 
   service { $service_name:
-    ensure     => running,
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
+    ensure => running,
+    enable => true,
   }
 
   # configure hitch.service
+  $hitch_dropin = @(LIMITS)
+  [Service]
+  LimitNOFILE=65536
+  | LIMITS
+
   systemd::dropin_file { 'limits.conf':
-    unit    => 'hitch.service',
-    content => template('hitch/limits.conf.erb'),
+    unit    => $service_name,
+    content => $hitch_dropin,
+    notify  => Service[$service_name],
   }
 }

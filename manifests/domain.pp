@@ -82,10 +82,6 @@ define hitch::domain (
   $dhparams_file = $hitch::dhparams_file
   $pem_file="${config_root}/${title}.pem"
 
-  Concat::Fragment {
-    notify  => Class['hitch::service'],
-  }
-
   # Add a line to the hitch config file
   concat::fragment { "hitch::domain ${title}":
     target  => $config_file,
@@ -99,7 +95,6 @@ define hitch::domain (
     mode   => '0640',
     owner  => $::hitch::file_owner,
     group  => $::hitch::group,
-    notify => Class['hitch::service'],
   }
 
   concat::fragment {"${title} key":

@@ -58,7 +58,7 @@ Data type: `String`
 
 Service name for the hitch service.
 
-Default value: `'hitch'`
+Default value: `'hitch.service'`
 
 ##### `user`
 

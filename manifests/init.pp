@@ -57,7 +57,7 @@ class hitch (
   String $user = 'hitch',
   String $group = 'hitch',
   String $package_name = 'hitch',
-  String $service_name = 'hitch',
+  String $service_name = 'hitch.service',
   String $file_owner = 'root',
   Stdlib::Absolutepath $config_file = '/etc/hitch/hitch.conf',
   Stdlib::Absolutepath $dhparams_file = '/etc/hitch/dhparams.pem',
@@ -76,11 +76,12 @@ class hitch (
   Optional[String] $tls_protos = undef,
 ) {
 
-  class { '::hitch::install':
+  class { 'hitch::install':
     package     => $package_name,
     manage_repo => $manage_repo,
   }
-  -> class { '::hitch::config':
+
+  class { 'hitch::config':
     config_root           => $config_root,
     config_file           => $config_file,
     dhparams_file         => $dhparams_file,
@@ -98,14 +99,18 @@ class hitch (
     alpn_protos           => $alpn_protos,
     tls_protos            => $tls_protos,
   }
-  ~> class { '::hitch::service':
+
+  class { 'hitch::service':
     service_name => $service_name,
   }
-  -> Class['::hitch']
+
+  Class['hitch::install'] -> Class['hitch::config']
+  Class['hitch::config'] ~> Class['hitch::service']
 
   $domains.each |$domain_title, $domain_params| {
     hitch::domain { $domain_title:
-      * => $domain_params,
+      notify => Class['hitch::service'],
+      *      => $domain_params,
     }
   }
 }
