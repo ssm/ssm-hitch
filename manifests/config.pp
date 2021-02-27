@@ -11,12 +11,28 @@ class hitch::config (
   String $file_owner,
   String $user,
   String $group,
-  Optional[String] $dhparams_content,
   Enum['on','off'] $write_proxy_v2,
-  String $frontend,
+  Variant[String, Array] $frontend,
   String $backend,
   String $ciphers,
+  Variant[Integer, Enum['auto']] $workers,
+  Enum['on','off'] $prefer_server_ciphers,
+  Optional[String] $dhparams_content = undef,
+  Optional[String] $alpn_protos = undef,
+  Optional[String] $tls_protos = undef,
 ) {
+
+  case $frontend {
+    Array: {
+      $frontend_array = $frontend
+    }
+    String: {
+      $frontend_string = $frontend
+    }
+    default: {
+      fail('invalid frontend')
+    }
+  }
 
   file { $config_root:
     ensure  => directory,
@@ -59,5 +75,4 @@ class hitch::config (
     content => template('hitch/hitch.conf.erb'),
     target  => $config_file,
   }
-
 }

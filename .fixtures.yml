@@ -1,6 +1,7 @@
 fixtures:
   forge_modules:
-    stdlib: "puppetlabs/stdlib"
     concat: "puppetlabs/concat"
-  symlinks:
-    hitch: "#{source_dir}"
+    inifile: "puppetlabs/inifile"
+    stdlib: "puppetlabs/stdlib"
+    systemd: "camptocamp/systemd"
+    translate: "puppetlabs/translate"
