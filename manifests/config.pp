@@ -1,6 +1,5 @@
-# == Class hitch::config
-#
-# This class is called from hitch for service config.
+# @summary
+#   Manage the hitch configuration, systemd configuration and default DH parameters.
 #
 # @api private
 class hitch::config (

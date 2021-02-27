@@ -1,45 +1,48 @@
-# Class: hitch
-# ===========================
+# @summary
+#   Manage the hitch TLS proxy
 #
-# Full description of class hitch here.
-#
-# Parameters
-# ----------
-#
-# @param package_name [String]
+# @param package_name
 #   Package name for installing hitch.
 #
-# @param service_name [String]
+# @param service_name
 #   Service name for the hitch service.
 #
-# @param user [String]
+# @param user
 #   User running the service.
 #
-# @param group [String]
+# @param group
 #   Group running the service.
 #
-# @param file_owner [String]
+# @param backend
+#   Where to proxy requests.
+#
+# @param config_file
+#   Path to the hitch configuration file.
+#
+# @param file_owner
 #   User owning the configuration files. Defaults to "root".
 #
-# @param dhparams_file [Stdlib::Absolutepath]
+# @param dhparams_file
 #   Path to file for Diffie-Hellman parameters, which are shared
 #   by all domains.
 #
-# @param dhparams_content [Optional[String]]
+# @param dhparams_content
 #   Content for the DH parameter file.  If unset, DH parameters will
 #   be generated on the node, which may take a long time.
 #
-# @param config_root [Stdlib::Absolutepath]
-#   Configuration root directory. Default: /etc/hitch/
+# @param config_root
+#   Configuration root directory. The hitch::domain defined type
+#   will place certificates here.
 #
-# @param purge_config_root [Boolean]
+#
+# @param purge_config_root
 #   If true, will delete all unmanaged files from the config_root.
 #   Defaults to false.
 #
-# @param frontend[Variant[String, Array]]
+# @param frontend
 #   The listening frontend(s) for hitch.
 #
-# @param manage_repo [Boolean]
+# @param manage_repo
 #    If true, install the EPEL repository on RedHat OS family.
 #
 class hitch (

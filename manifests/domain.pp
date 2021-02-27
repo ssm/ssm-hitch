@@ -1,4 +1,5 @@
-# == Define hitch::domain
+# @summary
+#   Add a TLS certificate and key for a domain
 #
 # This define installs pem files to the config root, and configures
 # them in the hitch config file.
@@ -11,33 +12,33 @@
 #
 # Parameters:
 #
-# @param ensure [Enum['present','absent']]
+# @param ensure
 #   The desired state of the hitch domain.  Default is 'present'.
 #
-# @param default [Boolean]
+# @param default
 #   If there are multiple domains, set this to true to make this the
 #   default domain used by hitch.  If there is only one domain, it
 #   will be the default domain no matter what you set here. Defaults
 #   to false.
 #
-# @param [Optional[String]] cacert_content
+# @param cacert_content
 #   A PEM encoded CA certificate.
 #
-# @param [Optional[Stdlib::Filesource]] cacert_source
+# @param cacert_source
 #   Path to a PEM encoded CA certificate.
 #
-# @param [Optional[String]] cert_content
+# @param cert_content
 #   A PEM encoded certificate. This must be a certificate matching the
 #   key.
 #
-# @param [Optional[Stdlib::Filesource]] cert_source
+# @param cert_source
 #   Path to a PEM encoded certificate. This must be a certificate
 #   matching the key.
 #
-# @param [Optional[String]] key_content
+# @param key_content
 #   A PEM encoded key. This must be a key matching the certificate.
 #
-# @param [Optional[Stdlib::Filesource]] key_source
+# @param key_source
 #   Path to a PEM encoded key. This must be a key matching the
 #   certificate.
 #

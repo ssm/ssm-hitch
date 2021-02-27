@@ -8,29 +8,23 @@
 
 #### Public Classes
 
-* [`hitch`](#hitch): Class: hitch ===========================  Full description of class hitch here.  Parameters ----------
+* [`hitch`](#hitch): Manage the hitch TLS proxy
 
 #### Private Classes
 
-* `hitch::config`: == Class hitch::config  This class is called from hitch for service config.
-* `hitch::install`: == Class hitch::install  This class is called from hitch for install.
-* `hitch::service`: == Class hitch::service  This class is meant to be called from hitch. It ensure the service is running.
+* `hitch::config`: Manage the hitch configuration, systemd configuration and default DH parameters.
+* `hitch::install`: Manage the hitch package and optionally a repository
+* `hitch::service`: Manage the hitch service
 
 ### Defined types
 
-* [`hitch::domain`](#hitchdomain): == Define hitch::domain  This define installs pem files to the config root, and configures them in the hitch config file.  The CA certificate
+* [`hitch::domain`](#hitchdomain): Add a TLS certificate and key for a domain
 
 ## Classes
 
 ### `hitch`
 
-Class: hitch
-===========================
-
-Full description of class hitch here.
-
-Parameters
-----------
+Manage the hitch TLS proxy
 
 #### Parameters
 
@@ -60,6 +54,18 @@ Data type: `String`
 
 Group running the service.
 
+##### `backend`
+
+Data type: `String`
+
+Where to proxy requests.
+
+##### `config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+Path to the hitch configuration file.
+
 ##### `file_owner`
 
 Data type: `String`
@@ -84,7 +90,8 @@ be generated on the node, which may take a long time.
 
 Data type: `Stdlib::Absolutepath`
 
-Configuration root directory. Default: /etc/hitch/
+Configuration root directory. The hitch::domain defined type
+will place certificates here.
 
 ##### `purge_config_root`
 
@@ -104,18 +111,6 @@ The listening frontend(s) for hitch.
 Data type: `Boolean`
 
 If true, install the EPEL repository on RedHat OS family.
-
-##### `config_file`
-
-Data type: `Stdlib::Absolutepath`
-
-
-
-##### `backend`
-
-Data type: `String`
-
-
 
 ##### `write_proxy_v2`
 
@@ -162,8 +157,6 @@ Data type: `Optional[String]`
 ## Defined types
 
 ### `hitch::domain`
-
-== Define hitch::domain
 
 This define installs pem files to the config root, and configures
 them in the hitch config file.

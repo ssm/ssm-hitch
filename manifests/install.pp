@@ -1,6 +1,5 @@
-# == Class hitch::install
-#
-# This class is called from hitch for install.
+# @summary
+#  Manage the hitch package and optionally a repository
 #
 # @api private
 class hitch::install (

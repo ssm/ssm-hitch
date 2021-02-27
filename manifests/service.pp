@@ -1,7 +1,5 @@
-# == Class hitch::service
-#
-# This class is meant to be called from hitch.
-# It ensure the service is running.
+# @summary
+#  Manage the hitch service
 #
 # @api private
 class hitch::service (
