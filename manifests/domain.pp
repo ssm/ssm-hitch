@@ -10,7 +10,23 @@
 # You can specify cacert, cert and key with either _content or _source
 # suffix.
 #
-# Parameters:
+# @example website with TLS files from managed node
+#   hitch::domain { 'example.com':
+#     cacert_source => '/etc/pki/tls/certs/ca.pem',
+#     cert_source   => '/etc/pki/tls/certs/example.com.pem',
+#     key_source    => '/etc/pki/tls/private_keys/example.com.pem',
+#   }
+#
+# @example website with TLS content from hiera
+#   class profile::hitch (
+#      Hash $domains = {},
+#   ) {
+#     $domains.each |$domain_title, $domain_params| {
+#       hitch::domain { $domain_title:
+#         * => $domain_params,
+#       }
+#     }
+#   }
 #
 # @param ensure
 #   The desired state of the hitch domain.  Default is 'present'.

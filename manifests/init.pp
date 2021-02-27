@@ -1,6 +1,15 @@
 # @summary
 #   Manage the hitch TLS proxy
 #
+# @example defaults
+#   include hitch
+#
+#   hitch::domain { 'example.com':
+#     cacert_source => '/etc/pki/tls/certs/ca.pem',
+#     cert_source   => '/etc/pki/tls/certs/example.com.pem',
+#     key_source    => '/etc/pki/tls/private_keys/example.com.pem',
+#   }
+#
 # @param package_name
 #   Package name for installing hitch.
 #
