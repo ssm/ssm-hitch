@@ -7,7 +7,6 @@
     * [Setup requirements](#setup-requirements)
     * [Beginning with hitch](#beginning-with-hitch)
 4. [Usage - Configuration options and additional functionality](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
 
@@ -68,6 +67,8 @@ connections to localhost, port 80.
 
 ## Usage
 
+The module is documented in the REFERENCE.md file.
+
 When using hitch with varnish or nginx, one can provide information
 about the connecting client, like the connecting IP Address and port,
 to varnish by using the PROXY protocol.  The backend should be
@@ -90,93 +91,6 @@ For more information about the PROXY protocol, see
 http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt
 
 
-## Reference
-
-### class: hitch
-
-This class installs hitch, and manages the service and configuration
-file.  To start, hitch requires at least one hitch::domain.
-
-Parameters
-
-* **frontend**: The listening port for hitch.  (optional, default is
-  the https port)
-* **ciphers**: The cipher list used for the encryption. (optional,
-  default is strong ciphers with forward secrecy)
-
-* **backend**: The address and port for the backend. (optional,
-  default is the http port on the local host)
-* **write_proxy_v2**: If set to "on", use the PROXY protocol instead
-  of HTTP for the backend connection.  (optional, default "off")
-
-* **package_name**: The name of the package to be installed (optional,
-  default is osfamily specific)
-* **service_name**: The name of the service (optional, default is
-  osfamily specific)
-
-* **file_owner**: The owner of the files and directories used to
-  configure hitch. (optional, default "root")
-* **config_file**: Path to the hitch configuration file (optional,
-  default is "/etc/hitch/hitch.conf")
-* **config_root**: Path to the root directory of the hitch
-  configuration (optional, default is "/etc/hitch")
-* **purge_config_root**: If true, remove all unknown files in the
-  config_root (optional, default false)
-
-* **dhparams_file**: Path the the dhparams file (optional, default is
-  /etc/hitch/dhparams.pem)
-* **dhparams_content**: A string containing the default dhparams used
-  in all domain PEM files.  (optional. If not set, a dhparams file
-  will be generated on the host.)
-
-* **domains**: A hash used to create hitch::domain resources, for use
-  with hiera. (optional, default {})
-
-* **manage_repo**: If true, install installs the `epel-release`
-  package on Red Hat OS family so Hitch can be installed. (optional,
-  default true on RedHat, otherwise false)
-
-### define: hitch::domain
-
-Configure a domain in hitch.conf, and generate the PEM file used to
-hold all the TLS keys, certificates and parameters.
-
-Parameters
-
-* **ensure**: set the desired state of the resource. (optional, valid
-  values are absent or present, default is present)
-
-One of **key_content** and **key_source** is required.
-
-* **key_content**: a string containing the TLS key (no default)
-* **key_source**: source to the TLS key, either a file, or a puppet
-  uri (no default)
-
-One of **cert_content** and **cert_source** is required.
-
-* **cert_content**: a string containing the TLS certificate (no
-  default)
-* **cert_source**: source to the TLS certificate, either a file, or a
-  puppet uri (no default)
-
-No more than one of **cacert_content** and **cacert_source** must be
-specified.
-
-* **cacert_content**: a string containing the ca certificate chain
-  (optional, no default)
-* **cacert_source**: source to the ca certificate chain, either a
-  file, or a puppet uri (optional, no default)
-
-No more than one of **dhparams_content** and **dhparams_source** must
-be specified.  If not specified, the dhparams of the **hitch** class
-is used instead.
-
-* **dhparams_content**: a string containing the ca certificate chain
-  (optional, default is the dhparams of the hitch class)
-* **dhparams_source**: source to the ca certificate chain, either a
-  file, or a puppet uri (optional, default is the dhparams of the
-  hitch class)
-
 ## Limitations
 
 You need to define at least one `hitch::domain`, or the `hitch`
@@ -184,5 +98,4 @@ service will not start.
 
 ## Development
 
-Please see CONTRIBUTING.md for contributing to the development of this
-module.
+Issues and pull requests welcome.
