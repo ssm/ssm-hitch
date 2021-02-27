@@ -1,0 +1,52 @@
+<%- |
+  String $user,
+  String $group,
+  Variant[String, Array[String]] $frontend,
+  String $backend,
+  Variant[Integer, Enum['auto']] $workers,
+  Enum['on', 'off'] $write_proxy_v2,
+  Optional[String] $alpn_protos,
+  Optional[String] $tls_protos,
+  String $ciphers,
+  Enum['on', 'off'] $prefer_server_ciphers,
+| -%>
+# Configuration for hitch
+
+user = "<%= $user %>"
+group = "<%= $group %>"
+<% case $frontend { -%>
+<%   String: { -%>
+frontend = "<%= $frontend %>"
+<%   } -%>
+<%   Array[String]: { -%>
+<%     $frontend.each |String $f| {-%>
+frontend = "<%= $f %>"
+<%     } -%>
+<%   } -%>
+<% } -%>
+backend = "<%= $backend %>"
+<% case $workers { -%>
+<%   Integer: { -%>
+workers = <%= $workers %>
+<%   } -%>
+<%   'auto': { -%>
+workers = <%= $facts['processors']['count'] %>
+<%   } -%>
+<% } -%>
+<% if $write_proxy_v2 == "on" { -%>
+# use the PROXY v2 protocol to communicate with backend
+write-proxy-v2 = "<%= $write_proxy_v2 %>"
+<% } -%>
+<% if $alpn_protos { -%>
+alpn-protos = "<%= $alpn_protos %>"
+<% } -%>
+<% if $tls_protos { -%>
+tls-protos = <%= $tls_protos %>
+<% } -%>
+<% if $ciphers.length > 0 { -%>
+# Define a cipher list for communication
+ciphers = "<%= $ciphers %>"
+<% } -%>
+<% if $prefer_server_ciphers { -%>
+prefer-server-ciphers = <%= $prefer_server_ciphers %>
+<% } -%>
