@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 ### Changed
-  * Updated with PDK 1.18.0
+* Change parameter `hitch::frontend` to permit an array of strings in
+  addition to a single string
+
+### Added
+* Add parameter `hitch::workers`
+* Add parameter `hitch::prefer_server_ciphers`
+* Add parameter `hitch::alpn_protos`
+* Add parameter `hitch::tls_protos`
 
 ## [0.1.5] - 2019-10-22
 ### Fixed
