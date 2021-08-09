@@ -22,7 +22,7 @@
 
 ## Classes
 
-### `hitch`
+### <a name="hitch"></a>`hitch`
 
 Manage the hitch TLS proxy
 
@@ -42,9 +42,30 @@ hitch::domain { 'example.com':
 
 #### Parameters
 
-The following parameters are available in the `hitch` class.
+The following parameters are available in the `hitch` class:
 
-##### `package_name`
+* [`package_name`](#package_name)
+* [`service_name`](#service_name)
+* [`user`](#user)
+* [`group`](#group)
+* [`backend`](#backend)
+* [`config_file`](#config_file)
+* [`file_owner`](#file_owner)
+* [`dhparams_file`](#dhparams_file)
+* [`dhparams_content`](#dhparams_content)
+* [`config_root`](#config_root)
+* [`purge_config_root`](#purge_config_root)
+* [`frontend`](#frontend)
+* [`manage_repo`](#manage_repo)
+* [`write_proxy_v2`](#write_proxy_v2)
+* [`ciphers`](#ciphers)
+* [`domains`](#domains)
+* [`workers`](#workers)
+* [`prefer_server_ciphers`](#prefer_server_ciphers)
+* [`alpn_protos`](#alpn_protos)
+* [`tls_protos`](#tls_protos)
+
+##### <a name="package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -52,7 +73,7 @@ Package name for installing hitch.
 
 Default value: `'hitch'`
 
-##### `service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `String`
 
@@ -60,7 +81,7 @@ Service name for the hitch service.
 
 Default value: `'hitch.service'`
 
-##### `user`
+##### <a name="user"></a>`user`
 
 Data type: `String`
 
@@ -68,7 +89,7 @@ User running the service. Defaults vary by OS, see module hieradata.
 
 Default value: `'hitch'`
 
-##### `group`
+##### <a name="group"></a>`group`
 
 Data type: `String`
 
@@ -76,7 +97,7 @@ Group running the service. Defaults vary by OS, see module hieradata.
 
 Default value: `'hitch'`
 
-##### `backend`
+##### <a name="backend"></a>`backend`
 
 Data type: `String`
 
@@ -84,7 +105,7 @@ Where to proxy requests.
 
 Default value: `'[::1]:80'`
 
-##### `config_file`
+##### <a name="config_file"></a>`config_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -92,7 +113,7 @@ Path to the hitch configuration file.
 
 Default value: `'/etc/hitch/hitch.conf'`
 
-##### `file_owner`
+##### <a name="file_owner"></a>`file_owner`
 
 Data type: `String`
 
@@ -100,7 +121,7 @@ User owning the configuration files. Defaults to "root".
 
 Default value: `'root'`
 
-##### `dhparams_file`
+##### <a name="dhparams_file"></a>`dhparams_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -109,7 +130,7 @@ by all domains.
 
 Default value: `'/etc/hitch/dhparams.pem'`
 
-##### `dhparams_content`
+##### <a name="dhparams_content"></a>`dhparams_content`
 
 Data type: `Optional[String]`
 
@@ -118,7 +139,7 @@ be generated on the node, which may take a long time.
 
 Default value: ``undef``
 
-##### `config_root`
+##### <a name="config_root"></a>`config_root`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -127,7 +148,7 @@ will place certificates here.
 
 Default value: `'/etc/hitch'`
 
-##### `purge_config_root`
+##### <a name="purge_config_root"></a>`purge_config_root`
 
 Data type: `Boolean`
 
@@ -136,7 +157,7 @@ Defaults to false.
 
 Default value: ``false``
 
-##### `frontend`
+##### <a name="frontend"></a>`frontend`
 
 Data type: `Variant[String, Array]`
 
@@ -144,7 +165,7 @@ The listening frontend(s) for hitch.
 
 Default value: `'[*]:443'`
 
-##### `manage_repo`
+##### <a name="manage_repo"></a>`manage_repo`
 
 Data type: `Boolean`
 
@@ -152,7 +173,7 @@ If true, install the EPEL repository on RedHat OS family. Defaults vary by OS, s
 
 Default value: ``false``
 
-##### `write_proxy_v2`
+##### <a name="write_proxy_v2"></a>`write_proxy_v2`
 
 Data type: `Enum['on', 'off']`
 
@@ -160,7 +181,7 @@ Data type: `Enum['on', 'off']`
 
 Default value: `'off'`
 
-##### `ciphers`
+##### <a name="ciphers"></a>`ciphers`
 
 Data type: `String`
 
@@ -168,7 +189,7 @@ Data type: `String`
 
 Default value: `'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH'`
 
-##### `domains`
+##### <a name="domains"></a>`domains`
 
 Data type: `Optional[Hash]`
 
@@ -176,7 +197,7 @@ Data type: `Optional[Hash]`
 
 Default value: `{}`
 
-##### `workers`
+##### <a name="workers"></a>`workers`
 
 Data type: `Variant[Integer, Enum['auto']]`
 
@@ -184,7 +205,7 @@ Data type: `Variant[Integer, Enum['auto']]`
 
 Default value: `'auto'`
 
-##### `prefer_server_ciphers`
+##### <a name="prefer_server_ciphers"></a>`prefer_server_ciphers`
 
 Data type: `Enum['on','off']`
 
@@ -192,7 +213,7 @@ Data type: `Enum['on','off']`
 
 Default value: `'on'`
 
-##### `alpn_protos`
+##### <a name="alpn_protos"></a>`alpn_protos`
 
 Data type: `Optional[String]`
 
@@ -200,7 +221,7 @@ Data type: `Optional[String]`
 
 Default value: `'http/1.1'`
 
-##### `tls_protos`
+##### <a name="tls_protos"></a>`tls_protos`
 
 Data type: `Optional[String]`
 
@@ -210,7 +231,7 @@ Default value: ``undef``
 
 ## Defined types
 
-### `hitch::domain`
+### <a name="hitchdomain"></a>`hitch::domain`
 
 This define installs pem files to the config root, and configures
 them in the hitch config file.
@@ -249,9 +270,18 @@ class profile::hitch (
 
 #### Parameters
 
-The following parameters are available in the `hitch::domain` defined type.
+The following parameters are available in the `hitch::domain` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`default`](#default)
+* [`cacert_content`](#cacert_content)
+* [`cacert_source`](#cacert_source)
+* [`cert_content`](#cert_content)
+* [`cert_source`](#cert_source)
+* [`key_content`](#key_content)
+* [`key_source`](#key_source)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -259,7 +289,7 @@ The desired state of the hitch domain.  Default is 'present'.
 
 Default value: `present`
 
-##### `default`
+##### <a name="default"></a>`default`
 
 Data type: `Boolean`
 
@@ -270,7 +300,7 @@ to false.
 
 Default value: ``false``
 
-##### `cacert_content`
+##### <a name="cacert_content"></a>`cacert_content`
 
 Data type: `Optional[String]`
 
@@ -278,7 +308,7 @@ A PEM encoded CA certificate.
 
 Default value: ``undef``
 
-##### `cacert_source`
+##### <a name="cacert_source"></a>`cacert_source`
 
 Data type: `Optional[Stdlib::Filesource]`
 
@@ -286,7 +316,7 @@ Path to a PEM encoded CA certificate.
 
 Default value: ``undef``
 
-##### `cert_content`
+##### <a name="cert_content"></a>`cert_content`
 
 Data type: `Optional[String]`
 
@@ -295,7 +325,7 @@ key.
 
 Default value: ``undef``
 
-##### `cert_source`
+##### <a name="cert_source"></a>`cert_source`
 
 Data type: `Optional[Stdlib::Filesource]`
 
@@ -304,7 +334,7 @@ matching the key.
 
 Default value: ``undef``
 
-##### `key_content`
+##### <a name="key_content"></a>`key_content`
 
 Data type: `Optional[String]`
 
@@ -312,7 +342,7 @@ A PEM encoded key. This must be a key matching the certificate.
 
 Default value: ``undef``
 
-##### `key_source`
+##### <a name="key_source"></a>`key_source`
 
 Data type: `Optional[Stdlib::Filesource]`
 
