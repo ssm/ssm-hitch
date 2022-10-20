@@ -70,8 +70,20 @@ class hitch::config (
     }
   }
 
+  $hitch_conf_params = {
+    'user'                  => $user,
+    'group'                 => $group,
+    'frontend'              => $frontend,
+    'backend'               => $backend,
+    'workers'               => $workers,
+    'write_proxy_v2'        => $write_proxy_v2,
+    'alpn_protos'           => $alpn_protos,
+    'tls_protos'            => $tls_protos,
+    'ciphers'               => $ciphers,
+    'prefer_server_ciphers' => $prefer_server_ciphers,
+  }
   concat::fragment { "${title} config":
-    content => template('hitch/hitch.conf.erb'),
+    content => epp('hitch/hitch.conf.epp', $hitch_conf_params ),
     target  => $config_file,
   }
 }
