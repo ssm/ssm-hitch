@@ -20,7 +20,6 @@ class hitch::config (
   Optional[String] $alpn_protos = undef,
   Optional[String] $tls_protos = undef,
 ) {
-
   case $frontend {
     Array: {
       $frontend_array = $frontend
@@ -48,7 +47,7 @@ class hitch::config (
 
   if $dhparams_content {
     file { $dhparams_file:
-      ensure  => present,
+      ensure  => file,
       owner   => $file_owner,
       group   => $group,
       mode    => '0640',
@@ -63,7 +62,7 @@ class hitch::config (
     }
 
     -> file { $dhparams_file:
-      ensure => present,
+      ensure => file,
       owner  => $file_owner,
       group  => $group,
       mode   => '0640',

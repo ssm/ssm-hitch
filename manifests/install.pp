@@ -6,7 +6,6 @@ class hitch::install (
   String $package,
   Boolean $manage_repo,
 ) {
-
   if $manage_repo {
     if $facts['os']['family'] == 'RedHat' {
       ensure_resource('package', 'epel-release', { 'ensure' => 'present' })

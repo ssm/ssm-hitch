@@ -75,7 +75,6 @@ class hitch (
   Optional[String] $alpn_protos = 'http/1.1',
   Optional[String] $tls_protos = undef,
 ) {
-
   class { 'hitch::install':
     package     => $package_name,
     manage_repo => $manage_repo,

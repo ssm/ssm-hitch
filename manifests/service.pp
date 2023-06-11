@@ -5,7 +5,6 @@
 class hitch::service (
   String $service_name,
 ) {
-
   service { $service_name:
     ensure => running,
     enable => true,
@@ -13,7 +12,7 @@ class hitch::service (
 
   # configure hitch.service
   $hitch_dropin = @(LIMITS)
-  [Service]
+      [Service]
   LimitNOFILE=65536
   | LIMITS
 

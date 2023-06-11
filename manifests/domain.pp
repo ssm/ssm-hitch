@@ -68,14 +68,12 @@ define hitch::domain (
   Optional[Stdlib::Filesource] $key_source = undef,
   Optional[Stdlib::Filesource] $cacert_source = undef,
 
-)
-{
-
+) {
   if ($key_content and $cert_content) {
     validate_x509_rsa_key_pair($cert_content, $key_content)
   }
 
-  include ::hitch
+  include hitch
 
   $config_root = $hitch::config_root
   $config_file = $hitch::config_file
@@ -93,18 +91,18 @@ define hitch::domain (
   concat { $pem_file:
     ensure => $ensure,
     mode   => '0640',
-    owner  => $::hitch::file_owner,
-    group  => $::hitch::group,
+    owner  => $hitch::file_owner,
+    group  => $hitch::group,
   }
 
-  concat::fragment {"${title} key":
+  concat::fragment { "${title} key":
     target  => $pem_file,
     order   => '01',
     content => $key_content,
     source  => $key_source,
   }
 
-  concat::fragment {"${title} cert":
+  concat::fragment { "${title} cert":
     target  => $pem_file,
     order   => '02',
     content => $cert_content,
@@ -112,7 +110,7 @@ define hitch::domain (
   }
 
   if ($cacert_content or $cacert_source) {
-    concat::fragment {"${title} cacert":
+    concat::fragment { "${title} cacert":
       target  => $pem_file,
       order   => '03',
       content => $cacert_content,
@@ -120,7 +118,7 @@ define hitch::domain (
     }
   }
 
-  concat::fragment {"${title} dhparams":
+  concat::fragment { "${title} dhparams":
     target => $pem_file,
     source => $dhparams_file,
     order  => '04',
