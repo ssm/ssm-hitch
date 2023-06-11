@@ -12,9 +12,9 @@ class hitch::service (
 
   # configure hitch.service
   $hitch_dropin = @(LIMITS)
-      [Service]
-  LimitNOFILE=65536
-  | LIMITS
+    [Service]
+    LimitNOFILE=65536
+    | LIMITS
 
   systemd::dropin_file { 'limits.conf':
     unit    => $service_name,
